@@ -1,0 +1,35 @@
+{
+  "urn": "urn:uuid:0d32b3e0-45d5-11ec-ad0a-3bccdeca8e69",
+  "version": "0.1.0",
+  "name": "UCS Data Import",
+  "description": "A service for handling data import into UCS from CTC2",
+  "endpoints": [
+    {
+      "name": "UCS Data Import Route",
+      "host": "localhost",
+      "port": "3106",
+      "path": "/import-into-ucs",
+      "type": "http"
+    }
+  ],
+  "defaultChannelConfig": [
+    {
+      "name": "UCS Data Import Mediator",
+      "urlPattern": "^/import-into-ucs$",
+      "type": "http",
+      "allow": [
+        "elmis-role"
+      ],
+      "routes": [
+        {
+          "name": "eLMIS to EMR Mediator Route",
+          "host": "localhost",
+          "port": "3106",
+          "path": "/import-into-ucs",
+          "type": "http",
+          "primary": "true"
+        }
+      ]
+    }
+  ]
+}
