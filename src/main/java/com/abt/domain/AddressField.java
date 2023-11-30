@@ -1,4 +1,4 @@
-package tz.go.moh.ucs.domain;
+package com.abt.domain;
 
 public enum AddressField {
     HOUSE_NUMBER, STREET, REGION, LOCALITY, SECTOR, AREA, MUNICIPALITY, VILLAGE, TOWN,

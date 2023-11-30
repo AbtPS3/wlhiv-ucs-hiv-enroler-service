@@ -1,4 +1,4 @@
-package tz.go.moh.ucs.util;
+package com.abt.util;
 
 public class Constants {
     /**

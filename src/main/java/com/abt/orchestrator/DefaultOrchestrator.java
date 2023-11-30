@@ -1,4 +1,4 @@
-package tz.go.moh.ucs.orchestrator;
+package com.abt.orchestrator;
 
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
@@ -15,8 +15,8 @@ import org.openhim.mediator.engine.MediatorConfig;
 import org.openhim.mediator.engine.messages.FinishRequest;
 import org.openhim.mediator.engine.messages.MediatorHTTPRequest;
 import org.openhim.mediator.engine.messages.MediatorHTTPResponse;
-import tz.go.moh.ucs.domain.CTCPatient;
-import tz.go.moh.ucs.service.OpenSrpService;
+import com.abt.domain.CTCPatient;
+import com.abt.service.OpenSrpService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -106,13 +106,13 @@ public class DefaultOrchestrator extends UntypedActor {
             for (int i = 0; i < ctcPatients.size(); i++) {
                 ctcPatients.get(i).setUniqueId(identifiers.getString(i).replace("-", ""));
             }
-
-            String clientsEvents = OpenSrpService.generateClientEvent(ctcPatients);
-            sendRequestToDestination(clientsEvents);
         } catch (Exception e) {
             log.error(e.getMessage());
             handleBadRequest();
         }
+
+        String clientsEvents = OpenSrpService.generateClientEvent(ctcPatients);
+        sendRequestToDestination(clientsEvents);
     }
 
     private void sendRequestToDestination(String clientsEvents) {

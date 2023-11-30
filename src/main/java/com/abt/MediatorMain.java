@@ -1,4 +1,4 @@
-package tz.go.moh.ucs;
+package com.abt;
 
 import akka.actor.ActorSystem;
 import akka.event.Logging;
@@ -6,7 +6,7 @@ import akka.event.LoggingAdapter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openhim.mediator.engine.*;
-import tz.go.moh.ucs.orchestrator.DefaultOrchestrator;
+import com.abt.orchestrator.DefaultOrchestrator;
 
 import java.io.File;
 import java.io.FileNotFoundException;

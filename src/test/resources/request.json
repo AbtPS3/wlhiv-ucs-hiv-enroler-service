@@ -1,0 +1,43 @@
+{
+  "RequestID": "108445823180035",
+  "SpecimenDateTime": "2023-05-05 00:00:00",
+  "ReceivedDateTime": "2023-05-05 00:00:00",
+  "RegisteredDateTime": "2023-05-05 00:00:00",
+  "AnalysisDateTime": "2023-05-05 11:32:00",
+  "AuthorisedDateTime": "2023-05-05 11:32:55",
+  "AdmitAttendDateTime": "2023-05-05 00:00:00",
+  "CollectionVolume": 0,
+  "ReceivingFacilityCode": "107663-7",
+  "RegisteredBy": "Abdallah(IT)",
+  "TestedBy": "Abdallah Kipunde",
+  "AuthorisedBy": "Abdallah",
+  "OrderingNotes": "",
+  "EncryptedPatientID": "237f306841bd23a418878792252ff6c8",
+  "TestingFacilityCode": "107663-7",
+  "ReferringRequestID": "108445823180035",
+  "LIMSRejectionCode": "none",
+  "LIMSRejectionDesc": "none",
+  "LIMSFacilityCode": "107663-7",
+  "Repeated": "0",
+  "TBLResults": [
+    {
+      "SIValue": 0,
+      "SIUnits": "",
+      "SILoRange": "0.0",
+      "SIHiRange": "0.0",
+      "DateTimeValue": "",
+      "CodedValue": "",
+      "ResultSemiquantitive": "0",
+      "Note": true,
+      "LIMSObservationCode": "HIVVM",
+      "LIMSObservationDesc": "HIV-VIRAL LOAD (copies/mL",
+      "LIMSRptResult": "target not detected",
+      "LIMSRptUnits": "",
+      "LIMSRptFlag": "",
+      "LIMSRptRange": "",
+      "LIMSCodedValue": "",
+      "WorkUnits": "0.0",
+      "CostUnits": "0.0"
+    }
+  ]
+}

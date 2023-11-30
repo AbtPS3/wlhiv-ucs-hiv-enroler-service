@@ -1,10 +1,10 @@
-package tz.go.moh.ucs.service;
+package com.abt.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.joda.time.DateTime;
-import tz.go.moh.ucs.domain.*;
-import tz.go.moh.ucs.util.DateTimeTypeConverter;
+import com.abt.domain.*;
+import com.abt.util.DateTimeTypeConverter;
 
 import java.util.*;
 

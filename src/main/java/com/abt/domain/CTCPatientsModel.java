@@ -1,4 +1,4 @@
-package tz.go.moh.ucs.domain;
+package com.abt.domain;
 
 import java.util.List;
 

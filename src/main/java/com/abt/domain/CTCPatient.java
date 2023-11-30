@@ -1,6 +1,4 @@
-package tz.go.moh.ucs.domain;
-
-import java.util.List;
+package com.abt.domain;
 
 public class CTCPatient {
     private String healthFacilityCode;
