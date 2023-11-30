@@ -162,6 +162,7 @@ public class DefaultOrchestrator extends UntypedActor {
     private static String sendGetRequest(String url, String username, String password) throws IOException {
         URL urlObject = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
+        connection.setConnectTimeout(60000);
 
         // Set the request method to GET
         connection.setRequestMethod("GET");
