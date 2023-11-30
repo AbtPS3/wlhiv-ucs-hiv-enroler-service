@@ -13,6 +13,6 @@ A service used to register and enroll Women Living With HIV as UCS HIV Clients.
 To build and run the service after performing the above configurations, run the following
 
 ```
-  ./gradlew clean build
+  ./gradlew clean shadowJar
   java -jar build/libs/wlhiv-ucs-hiv-enrollment-service-<version>-SNAPSHOT.jar
 ```
