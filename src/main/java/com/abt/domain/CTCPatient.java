@@ -1,24 +1,63 @@
 package com.abt.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CTCPatient {
+    @SerializedName("health_facility_code")
     private String healthFacilityCode;
+
+    @SerializedName("first_name")
     private String firstName;
+
+    @SerializedName("surname")
     private String surname;
+
+    @SerializedName("middle_name")
     private String middleName;
+
+    @SerializedName("ctc_number")
     private String ctcNumber;
+
+    @SerializedName("date_of_birth")
     private long dateOfBirth;
+
+    @SerializedName("gender")
     private String gender;
+
+    @SerializedName("date_of_death")
     private long dateOfDeath;
+
+    @SerializedName("hiv_status")
     private boolean hivStatus;
+
+    @SerializedName("ward")
     private String ward;
+
+    @SerializedName("village")
     private String village;
+
+    @SerializedName("phone_number")
     private String phoneNumber;
+
+    @SerializedName("care_taker_name")
     private String careTakerName;
+
+    @SerializedName("care_taker_phone_number")
     private String careTakerPhoneNumber;
+
+    @SerializedName("provider_id")
     private String providerId;
+
+    @SerializedName("team")
     private String team;
+
+    @SerializedName("team_id")
     private String teamId;
+
+    @SerializedName("location_id")
     private String locationId;
+
+    @SerializedName("unique_id")
     private String uniqueId;
 
     public String getHealthFacilityCode() {
