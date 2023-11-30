@@ -31,6 +31,9 @@ import java.util.Map;
 
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
+/**
+ * Default orchestrator for handling requests and responses.
+ */
 public class DefaultOrchestrator extends UntypedActor {
 
     /**
@@ -72,77 +75,89 @@ public class DefaultOrchestrator extends UntypedActor {
         scheme = "http";
     }
 
+
     @Override
     public void onReceive(Object msg) throws Exception {
         if (msg instanceof MediatorHTTPRequest) {
-            originalRequest = (MediatorHTTPRequest) msg;
-            log.info("Received request: " + originalRequest.getHost() + " " + originalRequest.getMethod() + " " + originalRequest.getPath() + " " + originalRequest.getBody());
+            handleMediatorHTTPRequest((MediatorHTTPRequest) msg);
+        } else if (msg instanceof MediatorHTTPResponse) {
+            handleMediatorHTTPResponse((MediatorHTTPResponse) msg);
+        } else {
+            unhandled(msg);
+        }
+    }
 
-            List<CTCPatient> ctcPatients;
-            try {
-                ctcPatients = new Gson().fromJson(((MediatorHTTPRequest) msg).getBody(), new TypeToken<List<CTCPatient>>() {
-                }.getType());
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                FinishRequest finishRequest = new FinishRequest("Bad Request", "application/json", SC_BAD_REQUEST);
-                (originalRequest).getRequestHandler().tell(finishRequest, getSelf());
-                return;
-            }
+    private void handleMediatorHTTPRequest(MediatorHTTPRequest request) {
+        originalRequest = request;
+        log.info("Received request: {} {} {} {}", request.getHost(), request.getMethod(), request.getPath(), request.getBody());
 
-            //Obtain unique ids for registering clients into UCS
+        try {
+            List<CTCPatient> ctcPatients = new Gson().fromJson(request.getBody(), new TypeToken<List<CTCPatient>>() {
+            }.getType());
+            validateAndProcessRequest(ctcPatients);
+        } catch (Exception e) {
+            handleBadRequest();
+        }
+    }
+
+    private void validateAndProcessRequest(List<CTCPatient> ctcPatients) {
+        try {
             JSONArray identifiers = fetchOpenMRSIds(ctcPatients.size());
             for (int i = 0; i < ctcPatients.size(); i++) {
                 ctcPatients.get(i).setUniqueId(identifiers.getString(i).replace("-", ""));
             }
 
             String clientsEvents = OpenSrpService.generateClientEvent(ctcPatients);
-
-
-            String url = null;
-            Map<String, String> headers = new HashMap<>();
-            headers.put(HttpHeaders.CONTENT_TYPE, "application/json");
-            List<Pair<String, String>> parameters = new ArrayList<>();
-
-            if (config.getDynamicConfig().isEmpty()) {
-                log.debug("Dynamic config is empty, using config from mediator.properties");
-
-                // if we have a username and a password
-                // we want to add the username and password as the Basic Auth header in the HTTP request
-                if (username != null && !"".equals(username) && password != null && !"".equals(password)) {
-                    String auth = username + ":" + password;
-                    byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
-                    String authHeader = "Basic " + new String(encodedAuth);
-                    headers.put(HttpHeaders.AUTHORIZATION, authHeader);
-                }
-            }
-
-            url = scheme + "://" + host + ":" + port + "/opensrp/rest/event/add";
-
-            MediatorHTTPRequest request = new MediatorHTTPRequest(originalRequest.getRequestHandler(), getSelf(), host, "POST",
-                    url, clientsEvents, headers, parameters);
-
-            ActorSelection httpConnector = getContext().actorSelection(config.userPathFor("http-connector"));
-            httpConnector.tell(request, getSelf());
-        } else if (msg instanceof MediatorHTTPResponse) { //respond
-            log.info("Received response from target system");
-
-            FinishRequest finishRequest = ((MediatorHTTPResponse) msg).toFinishRequest();
-            (originalRequest).getRequestHandler().tell(finishRequest, getSelf());
-        } else {
-            unhandled(msg);
+            sendRequestToDestination(clientsEvents);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            handleBadRequest();
         }
     }
 
+    private void sendRequestToDestination(String clientsEvents) {
+        String url = scheme + "://" + host + ":" + port + "/opensrp/rest/event/add";
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaders.CONTENT_TYPE, "application/json");
+        List<Pair<String, String>> parameters = new ArrayList<>();
+
+        if (config.getDynamicConfig().isEmpty()) {
+            configureBasicAuthHeader(headers);
+        }
+
+        MediatorHTTPRequest newRequest = new MediatorHTTPRequest(originalRequest.getRequestHandler(), getSelf(), host, "POST",
+                url, clientsEvents, headers, parameters);
+
+        ActorSelection httpConnector = getContext().actorSelection(config.userPathFor("http-connector"));
+        httpConnector.tell(newRequest, getSelf());
+    }
+
+    private void configureBasicAuthHeader(Map<String, String> headers) {
+        if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+            String auth = username + ":" + password;
+            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
+            String authHeader = "Basic " + new String(encodedAuth);
+            headers.put(HttpHeaders.AUTHORIZATION, authHeader);
+        }
+    }
+
+    private void handleBadRequest() {
+        FinishRequest finishRequest = new FinishRequest("Bad Request", "application/json", SC_BAD_REQUEST);
+        originalRequest.getRequestHandler().tell(finishRequest, getSelf());
+    }
+
+    private void handleMediatorHTTPResponse(MediatorHTTPResponse response) {
+        log.info("Received response from target system");
+        FinishRequest finishRequest = response.toFinishRequest();
+        originalRequest.getRequestHandler().tell(finishRequest, getSelf());
+    }
 
     private JSONArray fetchOpenMRSIds(int numberToGenerate) throws Exception {
         String path = "/opensrp/uniqueids/get?source=2&numberToGenerate=" + numberToGenerate;
-
         String url = scheme + "://" + host + ":" + port + path;
         System.out.println("URL: " + url);
-
         return new JSONObject(sendGetRequest(url, username, password)).getJSONArray("identifiers");
     }
-
 
     private static String sendGetRequest(String url, String username, String password) throws IOException {
         URL urlObject = new URL(url);

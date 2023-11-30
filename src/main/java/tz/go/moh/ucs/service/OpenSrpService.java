@@ -197,7 +197,12 @@ public class OpenSrpService {
         return hivFollowupEvent;
     }
 
-
+    /**
+     * Sets metadata for the given Event based on a CTCPatient.
+     *
+     * @param event   The Event object.
+     * @param patient The CTCPatient object.
+     */
     private static void setMetaData(Event event, CTCPatient patient) {
         event.setLocationId(patient.getLocationId());
         event.setProviderId(patient.getProviderId());
@@ -215,7 +220,12 @@ public class OpenSrpService {
         event.setIdentifiers(new HashMap<>());
     }
 
-
+    /**
+     * Generates Client events for a list of CTCPatients.
+     *
+     * @param ctcPatients List of CTCPatient objects.
+     * @return JSON representation of ClientEvents.
+     */
     public static String generateClientEvent(List<CTCPatient> ctcPatients) {
 
         List<Client> clients = new ArrayList<>();
