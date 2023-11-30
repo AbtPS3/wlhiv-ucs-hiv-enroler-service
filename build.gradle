@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'org.example'
+group = 'com.abt'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    testImplementation group: 'com.typesafe.akka', name: 'akka-testkit_2.10', version: '2.3.7'
     implementation group: 'org.json', name: 'json', version: '20231013'
     implementation 'org.openhim:mediator-engine:4.0.0'
     implementation 'commons-io:commons-io:2.15.0'
@@ -21,4 +22,13 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    // Configure JAR settings
+    manifest {
+        attributes(
+                'Main-Class': 'com.abt.MainClass' // Specify your main class
+        )
+    }
 }
