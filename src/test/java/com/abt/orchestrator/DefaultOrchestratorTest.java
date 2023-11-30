@@ -1,4 +1,4 @@
-package tz.go.moh.ucs.orchestrator;
+package com.abt.orchestrator;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -14,8 +14,7 @@ import org.openhim.mediator.engine.RegistrationConfig;
 import org.openhim.mediator.engine.messages.FinishRequest;
 import org.openhim.mediator.engine.messages.MediatorHTTPRequest;
 import org.openhim.mediator.engine.testing.TestingUtils;
-import tz.go.moh.ucs.TestMockLauncher;
-import tz.go.moh.ucs.mock.MockDestination;
+import com.abt.orchestrator.mock.MockDestination;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,7 +71,7 @@ class DefaultOrchestratorTest {
             List<TestMockLauncher.ActorToLaunch> toLaunch = new LinkedList<>();
 
             toLaunch.add(new TestMockLauncher.ActorToLaunch("http-connector", MockDestination.class, null));
-            tz.go.moh.ucs.TestingUtils.launchActors(system, testConfig.getName(), toLaunch);
+            com.abt.orchestrator.TestingUtils.launchActors(system, testConfig.getName(), toLaunch);
 
             InputStream stream = DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
 

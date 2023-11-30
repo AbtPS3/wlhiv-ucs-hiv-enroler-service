@@ -1,4 +1,4 @@
-package tz.go.moh.ucs.mock;
+package com.abt.orchestrator.mock;
 
 import akka.actor.Props;
 import org.openhim.mediator.engine.testing.MockLauncher;

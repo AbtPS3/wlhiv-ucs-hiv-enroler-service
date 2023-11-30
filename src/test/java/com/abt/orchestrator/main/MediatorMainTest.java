@@ -1,8 +1,8 @@
-package tz.go.moh.ucs.main;
+package com.abt.orchestrator.main;
 
 import org.junit.jupiter.api.Test;
 import org.openhim.mediator.engine.MediatorConfig;
-import tz.go.moh.ucs.MediatorMain;
+import com.abt.MediatorMain;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
