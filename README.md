@@ -14,5 +14,5 @@ To build and run the service after performing the above configurations, run the 
 
 ```
   ./gradlew clean shadowJar
-  java -jar build/libs/wlhiv-ucs-hiv-enrollment-service-<version>-SNAPSHOT.jar
+  java -jar build/libs/wlhiv-ucs-hiv-enrollment-service-<version>.jar
 ```
