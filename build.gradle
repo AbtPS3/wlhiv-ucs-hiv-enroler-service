@@ -28,7 +28,7 @@ jar {
     // Configure JAR settings
     manifest {
         attributes(
-                'Main-Class': 'com.abt.MainClass' // Specify your main class
+                'Main-Class': 'com.abt.MediatorMain' // Specify your main class
         )
     }
 }
