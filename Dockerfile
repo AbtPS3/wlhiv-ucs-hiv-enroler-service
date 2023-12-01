@@ -1,5 +1,5 @@
 # Use an official OpenJDK runtime as a parent image
-FROM openjdk:11-jre-slim
+FROM openjdk:latest
 
 # Set the working directory in the container
 WORKDIR /app
@@ -17,16 +17,6 @@ COPY src /app/src
 
 # Build the project
 RUN ./gradlew clean shadowJar
-RUN sleep 10
-
-# Copy the application JAR file into the container at /app
-COPY build/libs/wlhiv-ucs-hiv-enrollment-service-1.0.0.jar /app/wlhiv-ucs-hiv-enrollment-service-1.0.0.jar
-
-# Copy the mediator.properties file to the container at /app
-COPY src/main/resources/mediator.properties /app/mediator.properties
-
-# Expose environment variables for configuration
-ENV MEDIATOR_CONFIG_FILE=/app/mediator.properties
 
 # Specify the default command to run on boot
-CMD ["java", "-jar", "-Dmediator.config.file=${MEDIATOR_CONFIG_FILE}", "wlhiv-ucs-hiv-enrollment-service-1.0.0.jar"]
+CMD ["java", "-jar", "/app/build/libs/wlhiv-ucs-hiv-enrollment-service-1.0.0.jar"]

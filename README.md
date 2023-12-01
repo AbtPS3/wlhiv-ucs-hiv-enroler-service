@@ -24,10 +24,13 @@ First Install docker in your PC by following [this guide](https://docs.docker.co
 
 `git clone https://github.com/AbtPS3/wlhiv-ucs-hiv-enroler-service.git`
 
-Once you have completed cloning the repo, go inside the repo in your computer: `cd wlhiv-ucs-hiv-enroler-service` and once in there use the following Docker commands for various uses:
+Once you have completed cloning the repo, go inside the repo in your computer: `cd wlhiv-ucs-hiv-enroler-service` 
+
+Update `mediator.properties` found in `src/main/resources/` with the correct configs and use the following Docker commands for various uses:
 
 ### Run/start
 `docker build -t ucs-import-service .`
+
 `docker run -p 127.0.0.1:8080:8080 -e MEDIATOR_CONFIG_FILE=/path/to/host/mediator.properties ucs-import-service`
 
 
