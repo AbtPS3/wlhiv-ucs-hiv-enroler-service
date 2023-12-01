@@ -27,7 +27,7 @@ public class Obs {
 
     public Obs(String fieldType, String fieldDataType, String fieldCode, String parentCode,
                List<Object> values, List<Object> humanReadableValues, String comments, String
-                       formSubmissionField) {
+                   formSubmissionField) {
         this.setFieldType(fieldType);
         this.fieldDataType = fieldDataType;
         this.fieldCode = fieldCode;

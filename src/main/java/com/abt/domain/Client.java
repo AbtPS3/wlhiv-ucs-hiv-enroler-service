@@ -7,34 +7,34 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.*;
 
 public class Client extends BaseEntity {
-    
+
     private String firstName;
-    
+
     private String middleName;
-    
+
     private String lastName;
-    
+
     private Date birthdate;
-    
+
     private Date deathdate;
-    
+
     private Boolean birthdateApprox;
-    
+
     private Boolean deathdateApprox;
-    
+
     private String gender;
-    
+
     private Map<String, List<String>> relationships;
 
     private String id;
 
     //This is an id field used to link a client to other clients or parent
-    
+
     private String relationalBaseEntityId;
-    
+
     private String clientType;
 
-    
+
     private String syncStatus;
 
     protected Client() {
@@ -46,8 +46,8 @@ public class Client extends BaseEntity {
     }
 
     public Client(String baseEntityId, String firstName, String middleName, String lastName, Date
-            birthdate, Date deathdate, Boolean birthdateApprox, Boolean deathdateApprox, String
-                          gender) {
+        birthdate, Date deathdate, Boolean birthdateApprox, Boolean deathdateApprox, String
+                      gender) {
         super(baseEntityId);
         this.firstName = firstName;
         this.middleName = middleName;
@@ -60,8 +60,8 @@ public class Client extends BaseEntity {
     }
 
     public Client(String baseEntityId, String firstName, String middleName, String lastName, Date
-            birthdate, Date deathdate, Boolean birthdateApprox, Boolean deathdateApprox, String
-                          gender, String identifierType, String identifier) {
+        birthdate, Date deathdate, Boolean birthdateApprox, Boolean deathdateApprox, String
+                      gender, String identifierType, String identifier) {
         super(baseEntityId);
         this.firstName = firstName;
         this.middleName = middleName;

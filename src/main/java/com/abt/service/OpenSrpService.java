@@ -1,10 +1,10 @@
 package com.abt.service;
 
+import com.abt.domain.*;
+import com.abt.util.DateTimeTypeConverter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.joda.time.DateTime;
-import com.abt.domain.*;
-import com.abt.util.DateTimeTypeConverter;
 
 import java.util.*;
 
@@ -242,8 +242,8 @@ public class OpenSrpService {
             familyRelationships.put("primary_caregiver", Collections.singletonList(ctcClient.getBaseEntityId()));
             familyClient.setRelationships(familyRelationships);
 
-            Map<String,String> familyIdentifier = new HashMap<>();
-            familyIdentifier.put("opensrp_id",patient.getUniqueId()+"_family");
+            Map<String, String> familyIdentifier = new HashMap<>();
+            familyIdentifier.put("opensrp_id", patient.getUniqueId() + "_family");
             familyClient.setIdentifiers(familyIdentifier);
 
 
@@ -251,10 +251,9 @@ public class OpenSrpService {
             ctcClientRelations.put("family", Collections.singletonList(familyClient.getBaseEntityId()));
             ctcClient.setRelationships(ctcClientRelations);
 
-            Map<String,String> clientIdentifier = new HashMap<>();
-            clientIdentifier.put("opensrp_id",patient.getUniqueId());
+            Map<String, String> clientIdentifier = new HashMap<>();
+            clientIdentifier.put("opensrp_id", patient.getUniqueId());
             ctcClient.setIdentifiers(clientIdentifier);
-
 
 
             //Generate family registration event
@@ -280,7 +279,7 @@ public class OpenSrpService {
         clientEvents.setNoOfEvents(events.size());
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-                .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter()).create();
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter()).create();
 
 
         return gson.toJson(clientEvents);

@@ -44,8 +44,8 @@ public class Address {
     }
 
     public Address(String addressType, Date startDate, Date endDate, Map<String, String>
-            addressFields, String latitude, String longitude, String postalCode, String
-                           stateProvince, String country) {
+        addressFields, String latitude, String longitude, String postalCode, String
+                       stateProvince, String country) {
         this.addressType = addressType;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -269,7 +269,7 @@ public class Address {
      */
     public int durationInDays() {
         return (int) (durationInMillis() == -1 ? durationInMillis()
-                : (durationInMillis() / (1000 * 60 * 60 * 24)));
+            : (durationInMillis() / (1000 * 60 * 60 * 24)));
     }
 
     /**

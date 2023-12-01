@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseEntity extends BaseDataObject {
-    
+
     private String baseEntityId;
-    
+
     private Map<String, String> identifiers;
-    
+
     private List<Address> addresses;
-    
+
     private Map<String, Object> attributes;
 
     protected BaseEntity() {
@@ -32,14 +32,14 @@ public class BaseEntity extends BaseDataObject {
     }
 
     public BaseEntity(String baseEntityId, Map<String, String> identifiers, Map<String, Object>
-            attributes) {
+        attributes) {
         this.baseEntityId = baseEntityId;
         this.identifiers = identifiers;
         this.attributes = attributes;
     }
 
     public BaseEntity(String baseEntityId, Map<String, String> identifiers, Map<String, Object>
-            attributes, List<Address> addresses) {
+        attributes, List<Address> addresses) {
         this.baseEntityId = baseEntityId;
         this.identifiers = identifiers;
         this.attributes = attributes;
