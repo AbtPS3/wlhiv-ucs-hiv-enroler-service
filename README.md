@@ -16,3 +16,37 @@ To build and run the service after performing the above configurations, run the 
   ./gradlew clean shadowJar
   java -jar build/libs/wlhiv-ucs-hiv-enrollment-service-<version>.jar
 ```
+
+
+## 3. Deployment via Docker
+
+First Install docker in your PC by following [this guide](https://docs.docker.com/engine/install/). Secondly, clone this repo to your computer by using git clone and the repo's address:
+
+`git clone https://github.com/AbtPS3/wlhiv-ucs-hiv-enroler-service.git`
+
+Once you have completed cloning the repo, go inside the repo in your computer: `cd wlhiv-ucs-hiv-enroler-service` and once in there use the following Docker commands for various uses:
+
+### Run/start
+`docker build -t ucs-import-service .`
+`docker run -p 127.0.0.1:8080:8080 -e MEDIATOR_CONFIG_FILE=/path/to/host/mediator.properties ucs-import-service`
+
+
+### Interact With Shell
+
+`docker exec -it ucs-import-service sh`
+
+### Stop Services
+
+`docker stop ucs-import-service`
+
+## License
+
+ISC
+
+## Author
+
+MOH, USAID PS3+, Abt Associates
+
+## Version
+
+1.0.0
