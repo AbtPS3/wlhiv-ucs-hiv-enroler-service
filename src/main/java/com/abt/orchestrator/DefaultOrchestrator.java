@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+import static org.apache.http.HttpStatus.SC_OK;
 
 /**
  * Default orchestrator for handling requests and responses.
@@ -60,6 +61,8 @@ public class DefaultOrchestrator extends UntypedActor {
     String username;
 
     String password;
+
+    private List<CTCPatient> ctcPatients;
 
     /**
      * Initializes a new instance of the {@link DefaultOrchestrator} class.
@@ -127,7 +130,7 @@ public class DefaultOrchestrator extends UntypedActor {
         log.info("Received request: {} {} {} {}", request.getHost(), request.getMethod(), request.getPath(), request.getBody());
 
         try {
-            List<CTCPatient> ctcPatients = new Gson().fromJson(request.getBody(), new TypeToken<List<CTCPatient>>() {
+            ctcPatients = new Gson().fromJson(request.getBody(), new TypeToken<List<CTCPatient>>() {
             }.getType());
             validateAndProcessRequest(ctcPatients);
         } catch (Exception e) {
@@ -189,7 +192,7 @@ public class DefaultOrchestrator extends UntypedActor {
 
     private void handleMediatorHTTPResponse(MediatorHTTPResponse response) {
         log.info("Received response from target system :: " + response.getBody());
-        FinishRequest finishRequest = response.toFinishRequest();
+        FinishRequest finishRequest = new FinishRequest(new Gson().toJson(ctcPatients), "application/json", SC_OK);
         originalRequest.getRequestHandler().tell(finishRequest, getSelf());
     }
 

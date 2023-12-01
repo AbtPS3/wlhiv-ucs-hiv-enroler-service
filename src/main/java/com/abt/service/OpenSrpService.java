@@ -235,6 +235,8 @@ public class OpenSrpService {
             Client familyClient = getClientEvent(patient);
             Client ctcClient = getFamilyHeadClientEvent(patient);
 
+            patient.setBaseEntityId(ctcClient.getBaseEntityId());
+
             Map<String, List<String>> familyRelationships = new HashMap<>();
             familyRelationships.put("family_head", Collections.singletonList(ctcClient.getBaseEntityId()));
             familyRelationships.put("primary_caregiver", Collections.singletonList(ctcClient.getBaseEntityId()));

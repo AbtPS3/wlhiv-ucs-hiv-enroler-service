@@ -60,6 +60,9 @@ public class CTCPatient {
     @SerializedName("unique_id")
     private String uniqueId;
 
+    @SerializedName("base_entity_id")
+    private String baseEntityId;
+
     public String getHealthFacilityCode() {
         return healthFacilityCode;
     }
@@ -210,5 +213,13 @@ public class CTCPatient {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public String getBaseEntityId() {
+        return baseEntityId;
+    }
+
+    public void setBaseEntityId(String baseEntityId) {
+        this.baseEntityId = baseEntityId;
     }
 }
