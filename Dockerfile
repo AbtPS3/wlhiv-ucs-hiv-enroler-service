@@ -17,6 +17,7 @@ COPY src /app/src
 
 # Build the project
 RUN ./gradlew clean shadowJar
+RUN sleep 10
 
 # Copy the application JAR file into the container at /app
 COPY build/libs/wlhiv-ucs-hiv-enrollment-service-1.0.0.jar /app/wlhiv-ucs-hiv-enrollment-service-1.0.0.jar
