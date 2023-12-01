@@ -31,7 +31,7 @@ Update `mediator.properties` found in `src/main/resources/` with the correct con
 ### Run/start
 `docker build -t ucs-import-service .`
 
-`docker run -p 127.0.0.1:8080:8080 -e MEDIATOR_CONFIG_FILE=/path/to/host/mediator.properties ucs-import-service`
+`run -d -p 127.0.0.1:9001:9001 ucs-import-service`
 
 
 ### Interact With Shell
