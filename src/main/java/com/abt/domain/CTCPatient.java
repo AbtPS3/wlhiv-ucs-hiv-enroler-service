@@ -35,8 +35,8 @@ public class CTCPatient {
     @SerializedName("hiv_status")
     private boolean hivStatus;
 
-    @SerializedName("ward")
-    private String ward;
+    @SerializedName("map_cue")
+    private String mapCue;
 
     @SerializedName("village")
     private String village;
@@ -148,12 +148,12 @@ public class CTCPatient {
         this.hivStatus = hivStatus;
     }
 
-    public String getWard() {
-        return ward;
+    public String getMapCue() {
+        return mapCue;
     }
 
-    public void setWard(String ward) {
-        this.ward = ward;
+    public void setMapCue(String mapCue) {
+        this.mapCue = mapCue;
     }
 
     public String getVillage() {

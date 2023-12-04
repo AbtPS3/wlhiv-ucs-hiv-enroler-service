@@ -58,7 +58,7 @@ public class OpenSrpService {
         familyClient.setId(UUID.randomUUID().toString());
         familyClient.setDateCreated(new Date());
         familyClient.setAttributes(new HashMap<>());
-        setAddress(familyClient, patient.getVillage(), patient.getWard());
+        setAddress(familyClient, patient.getVillage(), patient.getMapCue());
 
 
         return familyClient;
@@ -69,25 +69,25 @@ public class OpenSrpService {
      *
      * @param client  The Client object.
      * @param village The village information.
-     * @param ward    The ward information.
+     * @param mapCue  The mapCue information.
      */
-    public static void setAddress(Client client, String village, String ward) {
+    public static void setAddress(Client client, String village,
+                                  String mapCue) {
         List<Address> addresses = new ArrayList<>();
 
         if (village != null && !village.isEmpty()) {
             Address villageAddress = new Address();
             villageAddress.setAddressType("village");
             villageAddress.setCityVillage(village);
-            villageAddress.setAddressFields(new HashMap<>());
-            addresses.add(villageAddress);
-        }
 
-        if (ward != null && !ward.isEmpty()) {
-            Address wardAddress = new Address();
-            wardAddress.setAddressType("ward");
-            wardAddress.setCityVillage(ward);
-            wardAddress.setAddressFields(new HashMap<>());
-            addresses.add(wardAddress);
+            if (mapCue != null && !mapCue.isEmpty()) {
+                HashMap<String, String> addressFields = new HashMap<>();
+                addressFields.put("landmark", mapCue);
+                villageAddress.setAddressFields(addressFields);
+            } else {
+                villageAddress.setAddressFields(new HashMap<>());
+            }
+            addresses.add(villageAddress);
         }
 
         client.setAddresses(addresses);
@@ -126,7 +126,7 @@ public class OpenSrpService {
         attributes.put("Health_Insurance_Type", "None");
 
         ctcClient.setAttributes(attributes);
-        setAddress(ctcClient, patient.getVillage(), patient.getWard());
+        setAddress(ctcClient, patient.getVillage(), patient.getMapCue());
         return ctcClient;
     }
 
@@ -227,7 +227,7 @@ public class OpenSrpService {
         hivFollowupEvent.setEntityType("ec_hiv_register");
         hivFollowupEvent.addObs(new Obs("concept", "text",
             "new_or_current_hiv_client", "", Arrays.asList(new Object[]{
-                "existing"}), null, null, "new_or_current_hiv_client"));
+            "existing"}), null, null, "new_or_current_hiv_client"));
 
         hivFollowupEvent.addObs(new Obs("concept", "text",
             "client_hiv_status_during_registration", "",
@@ -240,7 +240,7 @@ public class OpenSrpService {
 
         hivFollowupEvent.addObs(new Obs("concept", "text",
             "place_where_test_was_conducted", "", Arrays.asList(new Object[]{
-                "ctc"}), null, null, "place_where_test_was_conducted"));
+            "ctc"}), null, null, "place_where_test_was_conducted"));
 
         hivFollowupEvent.addObs(new Obs("concept", "text", "ctc_number", "",
             Arrays.asList(new Object[]{patient.getCtcNumber()}), null, null,
