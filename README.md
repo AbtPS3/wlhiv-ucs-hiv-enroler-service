@@ -1,5 +1,7 @@
 # WLHIV-UCS-HIV-ENROLLMENT-SERVICE
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4ee76d66ffd2452aac37ea4054b7c13a)](https://app.codacy.com/gh/AbtPS3/wlhiv-ucs-hiv-enroler-service?utm_source=github.com&utm_medium=referral&utm_content=AbtPS3/wlhiv-ucs-hiv-enroler-service&utm_campaign=Badge_Grade)
+
 A service used to register and enroll Women Living With HIV as UCS HIV Clients.
 
 ## 1. Dev Requirements
