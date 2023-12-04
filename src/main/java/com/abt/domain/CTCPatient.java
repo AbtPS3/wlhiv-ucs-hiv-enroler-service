@@ -3,6 +3,11 @@ package com.abt.domain;
 import com.google.gson.annotations.SerializedName;
 
 public class CTCPatient {
+
+    @SerializedName("id")
+    private long id;
+
+
     @SerializedName("health_facility_code")
     private String healthFacilityCode;
 
@@ -62,6 +67,14 @@ public class CTCPatient {
 
     @SerializedName("base_entity_id")
     private String baseEntityId;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getHealthFacilityCode() {
         return healthFacilityCode;
