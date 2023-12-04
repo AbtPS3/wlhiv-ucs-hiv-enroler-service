@@ -8,7 +8,7 @@
         "dateOfBirth": 584981600000,
         "gender": "Female",
         "hivStatus": true,
-        "ward": "Ward A",
+        "mapCue": "Opposite na Shule",
         "village": "Village Y",
         "phoneNumber": "+255714345679",
         "careTakerName": "Jane Doe",
