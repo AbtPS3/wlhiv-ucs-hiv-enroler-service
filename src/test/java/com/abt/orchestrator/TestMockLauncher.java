@@ -13,9 +13,11 @@ public class TestMockLauncher extends UntypedActor {
     public TestMockLauncher(List<ActorToLaunch> actorsToLaunch) {
         for (ActorToLaunch actorToLaunch : actorsToLaunch) {
             if (actorToLaunch.args != null)
-                getContext().actorOf(Props.create(actorToLaunch.actorClass, actorToLaunch.args), actorToLaunch.name);
+                getContext().actorOf(Props.create(actorToLaunch.actorClass,
+                    actorToLaunch.args), actorToLaunch.name);
             else
-                getContext().actorOf(Props.create(actorToLaunch.actorClass), actorToLaunch.name);
+                getContext().actorOf(Props.create(actorToLaunch.actorClass),
+                    actorToLaunch.name);
         }
     }
 
@@ -25,11 +27,12 @@ public class TestMockLauncher extends UntypedActor {
     }
 
     public static class ActorToLaunch {
-        private String name;
-        private Class<? extends Actor> actorClass;
-        private Object args;
+        private final String name;
+        private final Class<? extends Actor> actorClass;
+        private final Object args;
 
-        public ActorToLaunch(String name, Class<? extends Actor> actorClass, Object args) {
+        public ActorToLaunch(String name, Class<? extends Actor> actorClass,
+                             Object args) {
             this.name = name;
             this.actorClass = actorClass;
             this.args = args;

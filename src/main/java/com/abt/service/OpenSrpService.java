@@ -22,7 +22,9 @@ public class OpenSrpService {
      * @return Obs object for the start event.
      */
     private static Obs getStartOb() {
-        return new Obs("concept", "start", "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "", Arrays.asList(new Object[]{new Date()}), null, null, "start");
+        return new Obs("concept", "start",
+            "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "",
+            Arrays.asList(new Object[]{new Date()}), null, null, "start");
     }
 
     /**
@@ -31,7 +33,9 @@ public class OpenSrpService {
      * @return Obs object for the end event.
      */
     private static Obs getEndOb() {
-        return new Obs("concept", "end", "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "", Arrays.asList(new Object[]{new Date()}), null, null, "end");
+        return new Obs("concept", "end",
+            "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "",
+            Arrays.asList(new Object[]{new Date()}), null, null, "end");
     }
 
     /**
@@ -133,41 +137,74 @@ public class OpenSrpService {
      * @param patient The CTCPatient object.
      * @return Family Registration Event.
      */
-    public static Event getFamilyRegistrationEvent(Client client, CTCPatient patient) {
+    public static Event getFamilyRegistrationEvent(Client client,
+                                                   CTCPatient patient) {
         Event familyRegistrationEvent = new Event();
         familyRegistrationEvent.setBaseEntityId(client.getBaseEntityId());
         familyRegistrationEvent.setEventType("Family Registration");
         familyRegistrationEvent.setEntityType("ec_independent_client");
         setMetaData(familyRegistrationEvent, patient);
-        familyRegistrationEvent.addObs(new Obs("formsubmissionField", "text", "last_interacted_with", "", Arrays.asList(new Object[]{String.valueOf(Calendar.getInstance().getTimeInMillis())}), null, null, "last_interacted_with"));
-        familyRegistrationEvent.addObs(new Obs("concept", "phonenumber", "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "", Arrays.asList(new Object[]{patient.getPhoneNumber()}), null, null, "phonenumber"));
+        familyRegistrationEvent.addObs(new Obs("formsubmissionField", "text",
+            "last_interacted_with", "",
+            Arrays.asList(new Object[]{String.valueOf(Calendar.getInstance().getTimeInMillis())}), null, null, "last_interacted_with"));
+        familyRegistrationEvent.addObs(new Obs("concept", "phonenumber",
+            "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "",
+            Arrays.asList(new Object[]{patient.getPhoneNumber()}), null, null
+            , "phonenumber"));
         return familyRegistrationEvent;
     }
 
 
     /**
-     * Creates a Family Member Registration Event for a given Client and CTCPatient.
+     * Creates a Family Member Registration Event for a given Client and
+     * CTCPatient.
      *
      * @param client  The Client object.
      * @param patient The CTCPatient object.
      * @return Family Member Registration Event.
      */
-    public static Event getFamilyMemberRegistrationEvent(Client client, CTCPatient patient) {
+    public static Event getFamilyMemberRegistrationEvent(Client client,
+                                                         CTCPatient patient) {
         Event familyMemberRegistrationEvent = new Event();
         familyMemberRegistrationEvent.setBaseEntityId(client.getBaseEntityId());
-        familyMemberRegistrationEvent.setEventType("Family Member Registration");
+        familyMemberRegistrationEvent.setEventType("Family Member " +
+            "Registration");
         familyMemberRegistrationEvent.setEntityType("ec_independent_client");
-        familyMemberRegistrationEvent.addObs(new Obs("concept", "phonenumber", "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "", Arrays.asList(new Object[]{patient.getPhoneNumber()}), null, null, "phonenumber"));
-        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField", "text", "1542AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "1542AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Arrays.asList(new Object[]{"164369AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}), Arrays.asList(new Object[]{"None"}), null, "service_provider"));
-        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField", "text", "id_avail", "", Arrays.asList(new Object[]{"None"}), null, null, "id_avail"));
-        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField", "text", "leader", "", Arrays.asList(new Object[]{"None"}), null, null, "leader"));
-        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField", "text", "last_interacted_with", "", Arrays.asList(new Object[]{String.valueOf(Calendar.getInstance().getTimeInMillis())}), null, null, "last_interacted_with"));
-        familyMemberRegistrationEvent.addObs(new Obs("concept", "text", "", "", Arrays.asList(new Object[]{client.getLastName()}), null, null, "surname"));
+        familyMemberRegistrationEvent.addObs(new Obs("concept", "phonenumber"
+            , "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "",
+            Arrays.asList(new Object[]{patient.getPhoneNumber()}), null, null
+            , "phonenumber"));
+        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField",
+            "text", "1542AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "1542AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            Arrays.asList(new Object[]{"164369AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}), Arrays.asList(new Object[]{"None"}), null, "service_provider"));
+        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField",
+            "text", "id_avail", "", Arrays.asList(new Object[]{"None"}), null
+            , null, "id_avail"));
+        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField",
+            "text", "leader", "", Arrays.asList(new Object[]{"None"}), null,
+            null, "leader"));
+        familyMemberRegistrationEvent.addObs(new Obs("formsubmissionField",
+            "text", "last_interacted_with", "",
+            Arrays.asList(new Object[]{String.valueOf(Calendar.getInstance().getTimeInMillis())}), null, null, "last_interacted_with"));
+        familyMemberRegistrationEvent.addObs(new Obs("concept", "text", "",
+            "", Arrays.asList(new Object[]{client.getLastName()}), null, null
+            , "surname"));
 
         if (patient.getCareTakerName() != null && !patient.getCareTakerName().isEmpty()) {
-            familyMemberRegistrationEvent.addObs(new Obs("concept", "text", "Has_Primary_Caregiver", "", Arrays.asList(new Object[]{"Yes"}), Arrays.asList(new Object[]{"Yes"}), null, "has_primary_caregiver"));
-            familyMemberRegistrationEvent.addObs(new Obs("concept", "text", "Primary_Caregiver_Name", "", Arrays.asList(new Object[]{patient.getCareTakerName()}), null, null, "primary_caregiver_name"));
-            familyMemberRegistrationEvent.addObs(new Obs("concept", "text", "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Arrays.asList(new Object[]{patient.getCareTakerPhoneNumber()}), null, null, "other_phone_number"));
+            familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
+                "Has_Primary_Caregiver", "",
+                Arrays.asList(new Object[]{"Yes"}),
+                Arrays.asList(new Object[]{"Yes"}), null,
+                "has_primary_caregiver"));
+            familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
+                "Primary_Caregiver_Name", "",
+                Arrays.asList(new Object[]{patient.getCareTakerName()}), null
+                , null, "primary_caregiver_name"));
+            familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
+                "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                Arrays.asList(new Object[]{patient.getCareTakerPhoneNumber()}), null, null, "other_phone_number"));
         }
 
 
@@ -182,17 +219,37 @@ public class OpenSrpService {
      * @param patient The CTCPatient object.
      * @return HIV Registration Event.
      */
-    public static Event getHIVRegistrationEvent(Client client, CTCPatient patient) {
+    public static Event getHIVRegistrationEvent(Client client,
+                                                CTCPatient patient) {
         Event hivFollowupEvent = new Event();
         hivFollowupEvent.setBaseEntityId(client.getBaseEntityId());
         hivFollowupEvent.setEventType("HIV Registration");
         hivFollowupEvent.setEntityType("ec_hiv_register");
-        hivFollowupEvent.addObs(new Obs("concept", "text", "new_or_current_hiv_client", "", Arrays.asList(new Object[]{"existing"}), null, null, "new_or_current_hiv_client"));
-        hivFollowupEvent.addObs(new Obs("concept", "text", "client_hiv_status_during_registration", "", Arrays.asList(new Object[]{"Positive"}), null, null, "client_hiv_status_during_registration"));
-        hivFollowupEvent.addObs(new Obs("concept", "text", "test_results", "", Arrays.asList(new Object[]{"Positive"}), null, null, "test_results"));
-        hivFollowupEvent.addObs(new Obs("concept", "text", "place_where_test_was_conducted", "", Arrays.asList(new Object[]{"ctc"}), null, null, "place_where_test_was_conducted"));
-        hivFollowupEvent.addObs(new Obs("concept", "text", "ctc_number", "", Arrays.asList(new Object[]{patient.getCtcNumber()}), null, null, "ctc_number"));
-        hivFollowupEvent.addObs(new Obs("concept", "text", "hiv_registration_date", "", Arrays.asList(new Object[]{Calendar.getInstance().getTimeInMillis()}), null, null, "hiv_registration_date"));
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "new_or_current_hiv_client", "", Arrays.asList(new Object[]{
+                "existing"}), null, null, "new_or_current_hiv_client"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "client_hiv_status_during_registration", "",
+            Arrays.asList(new Object[]{"Positive"}), null, null,
+            "client_hiv_status_during_registration"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text", "test_results", ""
+            , Arrays.asList(new Object[]{"Positive"}), null, null,
+            "test_results"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "place_where_test_was_conducted", "", Arrays.asList(new Object[]{
+                "ctc"}), null, null, "place_where_test_was_conducted"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text", "ctc_number", "",
+            Arrays.asList(new Object[]{patient.getCtcNumber()}), null, null,
+            "ctc_number"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "hiv_registration_date", "",
+            Arrays.asList(new Object[]{Calendar.getInstance().getTimeInMillis()}), null, null, "hiv_registration_date"));
+
         setMetaData(hivFollowupEvent, patient);
         return hivFollowupEvent;
     }
@@ -238,17 +295,21 @@ public class OpenSrpService {
             patient.setBaseEntityId(ctcClient.getBaseEntityId());
 
             Map<String, List<String>> familyRelationships = new HashMap<>();
-            familyRelationships.put("family_head", Collections.singletonList(ctcClient.getBaseEntityId()));
-            familyRelationships.put("primary_caregiver", Collections.singletonList(ctcClient.getBaseEntityId()));
+            familyRelationships.put("family_head",
+                Collections.singletonList(ctcClient.getBaseEntityId()));
+            familyRelationships.put("primary_caregiver",
+                Collections.singletonList(ctcClient.getBaseEntityId()));
             familyClient.setRelationships(familyRelationships);
 
             Map<String, String> familyIdentifier = new HashMap<>();
-            familyIdentifier.put("opensrp_id", patient.getUniqueId() + "_family");
+            familyIdentifier.put("opensrp_id", patient.getUniqueId() +
+                "_family");
             familyClient.setIdentifiers(familyIdentifier);
 
 
             Map<String, List<String>> ctcClientRelations = new HashMap<>();
-            ctcClientRelations.put("family", Collections.singletonList(familyClient.getBaseEntityId()));
+            ctcClientRelations.put("family",
+                Collections.singletonList(familyClient.getBaseEntityId()));
             ctcClient.setRelationships(ctcClientRelations);
 
             Map<String, String> clientIdentifier = new HashMap<>();
@@ -257,13 +318,16 @@ public class OpenSrpService {
 
 
             //Generate family registration event
-            Event familyRegistrationEvent = getFamilyRegistrationEvent(familyClient, patient);
+            Event familyRegistrationEvent =
+                getFamilyRegistrationEvent(familyClient, patient);
 
             //Generate family Member registration event
-            Event familyMemberRegistrationEvent = getFamilyMemberRegistrationEvent(ctcClient, patient);
+            Event familyMemberRegistrationEvent =
+                getFamilyMemberRegistrationEvent(ctcClient, patient);
 
             //Generate HIV Registration event
-            Event hivRegistrationEvent = getHIVRegistrationEvent(ctcClient, patient);
+            Event hivRegistrationEvent = getHIVRegistrationEvent(ctcClient,
+                patient);
 
 
             clients.add(familyClient);
@@ -278,8 +342,11 @@ public class OpenSrpService {
         clientEvents.setEvents(events);
         clientEvents.setNoOfEvents(events.size());
 
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter()).create();
+        Gson gson
+            = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+            .create();
 
 
         return gson.toJson(clientEvents);

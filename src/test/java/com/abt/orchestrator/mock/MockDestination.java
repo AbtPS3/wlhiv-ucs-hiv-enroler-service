@@ -63,9 +63,15 @@ public class MockDestination extends MockHTTPConnector {
         assertEquals(2, body.getJSONArray("clients").length());
         assertEquals(3, body.getJSONArray("events").length());
 
-        assertEquals("Family Registration", body.getJSONArray("events").getJSONObject(0).getString("eventType"));
-        assertEquals("Family Member Registration", body.getJSONArray("events").getJSONObject(1).getString("eventType"));
-        assertEquals("HIV Registration", body.getJSONArray("events").getJSONObject(2).getString("eventType"));
+        assertEquals("Family Registration",
+            body.getJSONArray("events").getJSONObject(0).getString("eventType"
+            ));
+        assertEquals("Family Member Registration",
+            body.getJSONArray("events").getJSONObject(1).getString("eventType"
+            ));
+        assertEquals("HIV Registration",
+            body.getJSONArray("events").getJSONObject(2).getString("eventType"
+            ));
 
 
     }

@@ -31,14 +31,16 @@ public class BaseEntity extends BaseDataObject {
         this.identifiers = identifiers;
     }
 
-    public BaseEntity(String baseEntityId, Map<String, String> identifiers, Map<String, Object>
+    public BaseEntity(String baseEntityId, Map<String, String> identifiers,
+                      Map<String, Object>
         attributes) {
         this.baseEntityId = baseEntityId;
         this.identifiers = identifiers;
         this.attributes = attributes;
     }
 
-    public BaseEntity(String baseEntityId, Map<String, String> identifiers, Map<String, Object>
+    public BaseEntity(String baseEntityId, Map<String, String> identifiers,
+                      Map<String, Object>
         attributes, List<Address> addresses) {
         this.baseEntityId = baseEntityId;
         this.identifiers = identifiers;

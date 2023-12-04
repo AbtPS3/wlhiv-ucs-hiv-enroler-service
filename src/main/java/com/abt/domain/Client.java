@@ -45,8 +45,10 @@ public class Client extends BaseEntity {
         super(baseEntityId);
     }
 
-    public Client(String baseEntityId, String firstName, String middleName, String lastName, Date
-        birthdate, Date deathdate, Boolean birthdateApprox, Boolean deathdateApprox, String
+    public Client(String baseEntityId, String firstName, String middleName,
+                  String lastName, Date
+        birthdate, Date deathdate, Boolean birthdateApprox,
+                  Boolean deathdateApprox, String
                       gender) {
         super(baseEntityId);
         this.firstName = firstName;
@@ -59,8 +61,10 @@ public class Client extends BaseEntity {
         this.gender = gender;
     }
 
-    public Client(String baseEntityId, String firstName, String middleName, String lastName, Date
-        birthdate, Date deathdate, Boolean birthdateApprox, Boolean deathdateApprox, String
+    public Client(String baseEntityId, String firstName, String middleName,
+                  String lastName, Date
+        birthdate, Date deathdate, Boolean birthdateApprox,
+                  Boolean deathdateApprox, String
                       gender, String identifierType, String identifier) {
         super(baseEntityId);
         this.firstName = firstName;
@@ -185,7 +189,8 @@ public class Client extends BaseEntity {
         return this;
     }
 
-    public Client withName(String firstName, String middleName, String lastName) {
+    public Client withName(String firstName, String middleName,
+                           String lastName) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;

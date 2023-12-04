@@ -25,8 +25,10 @@ public class Obs {
     public Obs() {
     }
 
-    public Obs(String fieldType, String fieldDataType, String fieldCode, String parentCode,
-               List<Object> values, List<Object> humanReadableValues, String comments, String
+    public Obs(String fieldType, String fieldDataType, String fieldCode,
+               String parentCode,
+               List<Object> values, List<Object> humanReadableValues,
+               String comments, String
                    formSubmissionField) {
         this.setFieldType(fieldType);
         this.fieldDataType = fieldDataType;
@@ -38,8 +40,12 @@ public class Obs {
         this.formSubmissionField = formSubmissionField;
     }
 
-    public Obs(String fieldType, String fieldDataType, String fieldCode, String parentCode, List<Object> values, List<Object> humanReadableValues, String comments, String formSubmissionField, boolean saveObsAsArray) {
-        this(fieldType, fieldDataType, fieldCode, parentCode, values, humanReadableValues, comments, formSubmissionField);
+    public Obs(String fieldType, String fieldDataType, String fieldCode,
+               String parentCode, List<Object> values,
+               List<Object> humanReadableValues, String comments,
+               String formSubmissionField, boolean saveObsAsArray) {
+        this(fieldType, fieldDataType, fieldCode, parentCode, values,
+            humanReadableValues, comments, formSubmissionField);
         this.saveObsAsArray = saveObsAsArray;
     }
 
@@ -86,7 +92,8 @@ public class Obs {
 
     public Object getValue() {
         if (values.size() > 1) {
-//            throw new RuntimeException("Multiset values can not be handled like single valued
+//            throw new RuntimeException("Multiset values can not be handled
+//            like single valued
 // fields. Use function getValues");
             return getValues();
         }

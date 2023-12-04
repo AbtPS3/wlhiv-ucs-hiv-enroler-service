@@ -22,13 +22,15 @@ public class MediatorMain {
     /**
      * Represents the mediator registration info.
      */
-    private static final String MEDIATOR_REGISTRATION_INFO = "mediator-registration-info.json";
+    private static final String MEDIATOR_REGISTRATION_INFO
+        = "mediator-registration-info.json";
 
     /**
      * Builds the routing table.
      *
      * @return Returns the routing table.
-     * @throws RoutingTable.RouteAlreadyMappedException if the route is already mapped
+     * @throws RoutingTable.RouteAlreadyMappedException if the route is
+     *                                                  already mapped
      */
     private static RoutingTable buildRoutingTable() throws RoutingTable.RouteAlreadyMappedException {
         RoutingTable routingTable = new RoutingTable();
@@ -52,8 +54,10 @@ public class MediatorMain {
      *
      * @param configPath The path of the configuration.
      * @return Returns the configuration instance.
-     * @throws IOException                              if an IO exception occurs
-     * @throws RoutingTable.RouteAlreadyMappedException if the route is already mapped
+     * @throws IOException                              if an IO exception
+     *                                                  occurs
+     * @throws RoutingTable.RouteAlreadyMappedException if the route is
+     *                                                  already mapped
      */
     private static MediatorConfig loadConfig(String configPath) throws IOException, RoutingTable.RouteAlreadyMappedException {
         MediatorConfig config = new MediatorConfig();
@@ -72,30 +76,36 @@ public class MediatorMain {
 
         config.setName(config.getProperty("mediator.name"));
         config.setServerHost(config.getProperty("mediator.host"));
-        config.setServerPort(Integer.parseInt(config.getProperty("mediator.port")));
-        config.setRootTimeout(Integer.parseInt(config.getProperty("mediator.timeout")));
+        config.setServerPort(Integer.parseInt(config.getProperty("mediator" +
+            ".port")));
+        config.setRootTimeout(Integer.parseInt(config.getProperty("mediator" +
+            ".timeout")));
 
         config.setCoreHost(config.getProperty("core.host"));
         config.setCoreAPIUsername(config.getProperty("core.api.user"));
         config.setCoreAPIPassword(config.getProperty("core.api.password"));
         if (config.getProperty("core.api.port") != null) {
-            config.setCoreAPIPort(Integer.parseInt(config.getProperty("core.api.port")));
+            config.setCoreAPIPort(Integer.parseInt(config.getProperty("core" +
+                ".api.port")));
         }
 
         config.setRoutingTable(buildRoutingTable());
         config.setStartupActors(buildStartupActorsConfig());
 
-        InputStream registrationInformation = MediatorMain.class.getClassLoader().getResourceAsStream(MEDIATOR_REGISTRATION_INFO);
+        InputStream registrationInformation =
+            MediatorMain.class.getClassLoader().getResourceAsStream(MEDIATOR_REGISTRATION_INFO);
 
         if (registrationInformation == null) {
             throw new FileNotFoundException("Unable to locate " + MEDIATOR_REGISTRATION_INFO);
         }
 
-        RegistrationConfig regConfig = new RegistrationConfig(registrationInformation);
+        RegistrationConfig regConfig =
+            new RegistrationConfig(registrationInformation);
 
         config.setRegistrationConfig(regConfig);
 
-        if (config.getProperty("mediator.heartbeats") != null && "true".equalsIgnoreCase(config.getProperty("mediator.heartbeats"))) {
+        if (config.getProperty("mediator.heartbeats") != null &&
+            "true".equalsIgnoreCase(config.getProperty("mediator.heartbeats"))) {
             config.setHeartbeatsEnabled(true);
         }
 
@@ -120,7 +130,8 @@ public class MediatorMain {
         String configPath = null;
         if (args.length == 2 && args[0].equals("--conf")) {
             configPath = args[1];
-            log.info("Loading mediator configuration from '" + configPath + "'...");
+            log.info("Loading mediator configuration from '" + configPath +
+                "'...");
         } else {
             log.info("No configuration specified. Using default properties...");
         }
@@ -144,7 +155,8 @@ public class MediatorMain {
         log.info("Starting mediator server...");
         server.start();
 
-        log.info(String.format("%s listening on %s:%s", config.getName(), config.getServerHost(), config.getServerPort()));
+        log.info(String.format("%s listening on %s:%s", config.getName(),
+            config.getServerHost(), config.getServerPort()));
         Thread.currentThread().join();
     }
 }

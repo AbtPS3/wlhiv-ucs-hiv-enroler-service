@@ -9,9 +9,11 @@
     <appender name="FILE" class="org.apache.log4j.rolling.RollingFileAppender">
         <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
             <param name="ActiveFileName" value="emr-mediator-elmis.log"/>
-            <param name="FileNamePattern" value="emr-mediator-elmis.%d{yyyy-MM-dd}.log.gz"/>
+            <param name="FileNamePattern"
+                   value="emr-mediator-elmis.%d{yyyy-MM-dd}.log.gz"/>
         </rollingPolicy>
-        <triggeringPolicy class="org.apache.log4j.rolling.SizeBasedTriggeringPolicy">
+        <triggeringPolicy
+            class="org.apache.log4j.rolling.SizeBasedTriggeringPolicy">
             <param name="MaxFileSize" value="5000"/>
         </triggeringPolicy>
         <layout class="org.apache.log4j.PatternLayout">

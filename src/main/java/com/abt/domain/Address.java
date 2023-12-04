@@ -43,8 +43,11 @@ public class Address {
     public Address() {
     }
 
-    public Address(String addressType, Date startDate, Date endDate, Map<String, String>
-        addressFields, String latitude, String longitude, String postalCode, String
+    public Address(String addressType, Date startDate, Date endDate,
+                   Map<String, String>
+                       addressFields, String latitude, String longitude,
+                   String postalCode,
+                   String
                        stateProvince, String country) {
         this.addressType = addressType;
         this.startDate = startDate;
@@ -104,8 +107,10 @@ public class Address {
     }
 
     /**
-     * Returns field matching the regex. Note that incase of multiple fields matching criteria
-     * function would return first match. The must be well formed to find out a single value
+     * Returns field matching the regex. Note that incase of multiple fields
+     * matching criteria
+     * function would return first match. The must be well formed to find out
+     * a single value
      *
      * @param regex
      * @return
@@ -127,7 +132,8 @@ public class Address {
     }
 
     /**
-     * Add field name from a list of predefined options from enum {@link AddressField}
+     * Add field name from a list of predefined options from enum
+     * {@link AddressField}
      *
      * @param field
      * @param value
@@ -245,7 +251,8 @@ public class Address {
     }
 
     /**
-     * If startDate is not specified returns -1. If endDate is not specified duration is from
+     * If startDate is not specified returns -1. If endDate is not specified
+     * duration is from
      * startDate to current date
      *
      * @return
@@ -262,7 +269,8 @@ public class Address {
     }
 
     /**
-     * If startDate is not specified returns -1. If endDate is not specified duration is from
+     * If startDate is not specified returns -1. If endDate is not specified
+     * duration is from
      * startDate to current date
      *
      * @return
@@ -273,33 +281,39 @@ public class Address {
     }
 
     /**
-     * If startDate is not specified returns -1. If endDate is not specified duration is from
+     * If startDate is not specified returns -1. If endDate is not specified
+     * duration is from
      * startDate to current date
      *
      * @return
      */
     public int durationInWeeks() {
-        return durationInDays() == -1 ? durationInDays() : (durationInDays() / 7);
+        return durationInDays() == -1 ? durationInDays() :
+            (durationInDays() / 7);
     }
 
     /**
-     * If startDate is not specified returns -1. If endDate is not specified duration is from
+     * If startDate is not specified returns -1. If endDate is not specified
+     * duration is from
      * startDate to current date
      *
      * @return
      */
     public int durationInMonths() {
-        return durationInDays() == -1 ? durationInDays() : durationInDays() / 30;
+        return durationInDays() == -1 ? durationInDays() :
+            durationInDays() / 30;
     }
 
     /**
-     * If startDate is not specified returns -1. If endDate is not specified duration is from
+     * If startDate is not specified returns -1. If endDate is not specified
+     * duration is from
      * startDate to current date
      *
      * @return
      */
     public int durationInYears() {
-        return durationInDays() == -1 ? durationInDays() : (durationInDays() / 365);
+        return durationInDays() == -1 ? durationInDays() :
+            (durationInDays() / 365);
     }
 
     /**

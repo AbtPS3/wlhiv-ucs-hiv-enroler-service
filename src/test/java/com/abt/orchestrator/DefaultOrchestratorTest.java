@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.JavaTestKit;
+import com.abt.orchestrator.mock.MockDestination;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.AfterEach;
@@ -14,7 +15,6 @@ import org.openhim.mediator.engine.RegistrationConfig;
 import org.openhim.mediator.engine.messages.FinishRequest;
 import org.openhim.mediator.engine.messages.MediatorHTTPRequest;
 import org.openhim.mediator.engine.testing.TestingUtils;
-import com.abt.orchestrator.mock.MockDestination;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +42,8 @@ class DefaultOrchestratorTest {
         testConfig.setName("UCS-DATA-IMPORT");
         testConfig.setProperties("mediator-unit-test.properties");
 
-        InputStream regInfo = DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("mediator-registration-info.json");
+        InputStream regInfo =
+            DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("mediator-registration-info.json");
         RegistrationConfig regConfig = null;
         if (regInfo != null) {
             regConfig = new RegistrationConfig(regInfo);
@@ -70,23 +71,28 @@ class DefaultOrchestratorTest {
         new JavaTestKit(system) {{
             List<TestMockLauncher.ActorToLaunch> toLaunch = new LinkedList<>();
 
-            toLaunch.add(new TestMockLauncher.ActorToLaunch("http-connector", MockDestination.class, null));
-            com.abt.orchestrator.TestingUtils.launchActors(system, testConfig.getName(), toLaunch);
+            toLaunch.add(new TestMockLauncher.ActorToLaunch("http-connector",
+                MockDestination.class, null));
+            com.abt.orchestrator.TestingUtils.launchActors(system,
+                testConfig.getName(), toLaunch);
 
-            InputStream stream = DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
+            InputStream stream =
+                DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
 
             assertNotNull(stream);
 
 
-            createActorAndSendRequest(system, testConfig, getRef(), IOUtils.toString(stream), DefaultOrchestrator.class, "/results");
+            createActorAndSendRequest(system, testConfig, getRef(),
+                IOUtils.toString(stream), DefaultOrchestrator.class,
+                "/results");
 
             final Object[] out =
-                    new ReceiveWhile<Object>(Object.class, duration("3 second")) {
-                        @Override
-                        protected Object match(Object msg) throws Exception {
-                            return msg;
-                        }
-                    }.get();
+                new ReceiveWhile<Object>(Object.class, duration("3 second")) {
+                    @Override
+                    protected Object match(Object msg) throws Exception {
+                        return msg;
+                    }
+                }.get();
 
             boolean foundResponse = false;
 
@@ -101,31 +107,37 @@ class DefaultOrchestratorTest {
     }
 
     /**
-     * Method for initiating actors, creating requests and sending request to the actor.
+     * Method for initiating actors, creating requests and sending request to
+     * the actor.
      *
-     * @param system     the actor system used to initialize the destination actor
+     * @param system     the actor system used to initialize the destination
+     *                   actor
      * @param testConfig the configuration used
      * @param sender     the sending actor
      * @param payload    the payload
      * @param type       class type of the destination orchestrator
      * @param path       to send the request
      */
-    public void createActorAndSendRequest(ActorSystem system, MediatorConfig testConfig, ActorRef sender, String payload, Class<?> type, String path) {
-        final ActorRef orchestratorActor = system.actorOf(Props.create(type, testConfig));
+    public void createActorAndSendRequest(ActorSystem system,
+                                          MediatorConfig testConfig,
+                                          ActorRef sender, String payload,
+                                          Class<?> type, String path) {
+        final ActorRef orchestratorActor = system.actorOf(Props.create(type,
+            testConfig));
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "text/json");
         MediatorHTTPRequest POST_Request = new MediatorHTTPRequest(
-                sender,
-                sender,
-                "unit-test",
-                "POST",
-                "http",
-                null,
-                null,
-                path,
-                payload,
-                headers,
-                Collections.<Pair<String, String>>emptyList()
+            sender,
+            sender,
+            "unit-test",
+            "POST",
+            "http",
+            null,
+            null,
+            path,
+            payload,
+            headers,
+            Collections.emptyList()
         );
 
         orchestratorActor.tell(POST_Request, sender);
