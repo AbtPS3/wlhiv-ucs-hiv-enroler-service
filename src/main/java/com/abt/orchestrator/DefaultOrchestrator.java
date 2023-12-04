@@ -208,10 +208,10 @@ public class DefaultOrchestrator extends UntypedActor {
     }
 
     private void handleMediatorHTTPResponse(MediatorHTTPResponse response) {
-        log.info("Received response from target system :: " + response.getBody());
+        log.info("Received response with status code :: " + response.getStatusCode());
         FinishRequest finishRequest =
-            new FinishRequest(new Gson().toJson(ctcPatients), "application" +
-                "/json", SC_OK);
+            new FinishRequest(new Gson().toJson(ctcPatients),
+                "application/json" , SC_OK);
         originalRequest.getRequestHandler().tell(finishRequest, getSelf());
     }
 
