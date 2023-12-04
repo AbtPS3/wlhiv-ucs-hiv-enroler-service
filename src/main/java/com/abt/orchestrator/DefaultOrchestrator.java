@@ -92,7 +92,8 @@ public class DefaultOrchestrator extends UntypedActor {
         String credentials = username + ":" + password;
 
         String encodedCredentials =
-            new String(Base64.encodeBase64(credentials.getBytes(StandardCharsets.ISO_8859_1)));
+            new String(Base64.encodeBase64(credentials
+                .getBytes(StandardCharsets.ISO_8859_1)));
         connection.setRequestProperty("Authorization",
             "Basic " + encodedCredentials);
 
@@ -102,7 +103,8 @@ public class DefaultOrchestrator extends UntypedActor {
         // Read the response from the server
         StringBuilder response = new StringBuilder();
         try (BufferedReader reader =
-                 new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                 new BufferedReader(
+                     new InputStreamReader(connection.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 response.append(line);
@@ -115,7 +117,8 @@ public class DefaultOrchestrator extends UntypedActor {
         if (responseCode == HttpURLConnection.HTTP_OK) {
             return response.toString();
         } else {
-            throw new IOException("Failed to get response. Response Code: " + responseCode);
+            throw new IOException("Failed to get response. Response Code: "
+                + responseCode);
         }
     }
 
@@ -138,7 +141,7 @@ public class DefaultOrchestrator extends UntypedActor {
         try {
             ctcPatients = new Gson().fromJson(request.getBody(),
                 new TypeToken<List<CTCPatient>>() {
-            }.getType());
+                }.getType());
             validateAndProcessRequest(ctcPatients);
         } catch (Exception e) {
             handleBadRequest();
@@ -148,9 +151,10 @@ public class DefaultOrchestrator extends UntypedActor {
     private void validateAndProcessRequest(List<CTCPatient> ctcPatients) {
         try {
             JSONArray identifiers = fetchOpenMRSIds(ctcPatients.size());
-            log.info("Successfully Received identifiers : " + identifiers.toString());
+            log.info("Received identifiers : " + identifiers.toString());
             for (int i = 0; i < ctcPatients.size(); i++) {
-                ctcPatients.get(i).setUniqueId(identifiers.getString(i).replace("-", ""));
+                ctcPatients.get(i).setUniqueId(identifiers.getString(i)
+                    .replace("-", ""));
             }
         } catch (Exception e) {
             log.info("Received an error message while getting Identifiers");
@@ -180,7 +184,7 @@ public class DefaultOrchestrator extends UntypedActor {
         MediatorHTTPRequest newRequest =
             new MediatorHTTPRequest(originalRequest.getRequestHandler(),
                 getSelf(), host, "POST",
-            url, clientsEvents, headers, parameters);
+                url, clientsEvents, headers, parameters);
 
         ActorSelection httpConnector =
             getContext().actorSelection(config.userPathFor("http-connector"));
@@ -213,10 +217,12 @@ public class DefaultOrchestrator extends UntypedActor {
 
     private JSONArray fetchOpenMRSIds(int numberToGenerate) throws Exception {
         String path =
-            "/opensrp/uniqueids/get?source=2&numberToGenerate=" + numberToGenerate;
+            "/opensrp/uniqueids/get?source=2&numberToGenerate="
+                + numberToGenerate;
         String url = scheme + "://" + host + ":" + port + path;
         System.out.println("URL: " + url);
-        return new JSONObject(sendGetRequest(url, username, password)).getJSONArray("identifiers");
+        return new JSONObject(sendGetRequest(url, username, password))
+            .getJSONArray("identifiers");
     }
 
 }

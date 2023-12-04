@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class Address {
-    private Boolean preferred;
 
     private String addressType;
 
@@ -330,7 +329,7 @@ public class Address {
     /**
      * The date when address was started or owned
      *
-     * @param endDate
+     * @param startDate
      * @return
      */
     public Address withStartDate(Date startDate) {

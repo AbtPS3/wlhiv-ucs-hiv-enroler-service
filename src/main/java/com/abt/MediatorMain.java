@@ -32,7 +32,8 @@ public class MediatorMain {
      * @throws RoutingTable.RouteAlreadyMappedException if the route is
      *                                                  already mapped
      */
-    private static RoutingTable buildRoutingTable() throws RoutingTable.RouteAlreadyMappedException {
+    private static RoutingTable buildRoutingTable()
+        throws RoutingTable.RouteAlreadyMappedException {
         RoutingTable routingTable = new RoutingTable();
         routingTable.addRoute("/import-into-ucs", DefaultOrchestrator.class);
 
@@ -59,7 +60,8 @@ public class MediatorMain {
      * @throws RoutingTable.RouteAlreadyMappedException if the route is
      *                                                  already mapped
      */
-    private static MediatorConfig loadConfig(String configPath) throws IOException, RoutingTable.RouteAlreadyMappedException {
+    private static MediatorConfig loadConfig(String configPath)
+        throws IOException, RoutingTable.RouteAlreadyMappedException {
         MediatorConfig config = new MediatorConfig();
 
         if (configPath != null) {
@@ -93,10 +95,12 @@ public class MediatorMain {
         config.setStartupActors(buildStartupActorsConfig());
 
         InputStream registrationInformation =
-            MediatorMain.class.getClassLoader().getResourceAsStream(MEDIATOR_REGISTRATION_INFO);
+            MediatorMain.class.getClassLoader()
+                .getResourceAsStream(MEDIATOR_REGISTRATION_INFO);
 
         if (registrationInformation == null) {
-            throw new FileNotFoundException("Unable to locate " + MEDIATOR_REGISTRATION_INFO);
+            throw new FileNotFoundException("Unable to locate "
+                + MEDIATOR_REGISTRATION_INFO);
         }
 
         RegistrationConfig regConfig =
@@ -105,7 +109,9 @@ public class MediatorMain {
         config.setRegistrationConfig(regConfig);
 
         if (config.getProperty("mediator.heartbeats") != null &&
-            "true".equalsIgnoreCase(config.getProperty("mediator.heartbeats"))) {
+            "true".equalsIgnoreCase(
+                config.getProperty("mediator.heartbeats"))
+        ) {
             config.setHeartbeatsEnabled(true);
         }
 

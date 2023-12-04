@@ -92,9 +92,6 @@ public class Obs {
 
     public Object getValue() {
         if (values.size() > 1) {
-//            throw new RuntimeException("Multiset values can not be handled
-//            like single valued
-// fields. Use function getValues");
             return getValues();
         }
         if (values == null || values.size() == 0) {

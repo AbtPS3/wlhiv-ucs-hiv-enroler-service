@@ -4,9 +4,9 @@ A service used to register and enroll Women Living With HIV as UCS HIV Clients.
 
 ## 1. Dev Requirements
 
-1. Java 11
-2. IntelliJ or Visual Studio Code
-3. Gradle
+ 1. Java 11
+ 2. IntelliJ or Visual Studio Code
+ 3. Gradle
 
 ## 2. Deployment
 

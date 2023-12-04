@@ -4,7 +4,9 @@ import java.util.List;
 
 public class ClientEvents {
     private List<Client> clients;
+
     private List<Event> events;
+
     private int no_of_events;
 
     public List<Client> getClients() {
