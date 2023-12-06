@@ -205,6 +205,9 @@ public class OpenSrpService {
                 "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
                 "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
                 Arrays.asList(new Object[]{patient.getCareTakerPhoneNumber()}), null, null, "other_phone_number"));
+            familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
+                "data_source", "",
+                Arrays.asList(new Object[]{"ctc_import"}), null, null, "ctc_import"));
         }
 
 
