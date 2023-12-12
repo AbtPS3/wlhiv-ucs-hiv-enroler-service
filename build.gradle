@@ -13,6 +13,7 @@ repositories {
 dependencies {
     testImplementation group: 'com.typesafe.akka', name: 'akka-testkit_2.10', version: '2.3.7'
     implementation group: 'org.json', name: 'json', version: '20231013'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'org.openhim:mediator-engine:4.0.0'
     implementation 'commons-io:commons-io:2.15.0'
     testImplementation platform('org.junit:junit-bom:5.9.1')

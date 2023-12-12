@@ -4,6 +4,9 @@ import com.abt.domain.*;
 import com.abt.util.DateTimeTypeConverter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import org.joda.time.DateTime;
 
 import java.util.*;
@@ -179,10 +182,24 @@ public class OpenSrpService {
             "", Arrays.asList(new Object[]{client.getLastName()}), null, null
             , "surname"));
 
-        familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
-            "phone_number", "",
-            Arrays.asList(new Object[]{patient.getPhoneNumber()}), null, null
-            , "phone_number"));
+        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+        try {
+            Phonenumber.PhoneNumber tzPhoneNumber =
+                phoneUtil.parse(patient.getPhoneNumber(), "TZ");
+
+            familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
+                "phone_number", "",
+                Arrays.asList(new Object[]{
+                    phoneUtil.format(
+                        tzPhoneNumber,
+                        PhoneNumberUtil.PhoneNumberFormat.NATIONAL)
+                        .replace(" ","")
+                }), null,
+                    null
+                , "phone_number"));
+        } catch (NumberParseException e) {
+            System.err.println("NumberParseException was thrown: " + e.toString());
+        }
 
         if (patient.getCareTakerName() != null && !patient.getCareTakerName().isEmpty()) {
             familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
@@ -194,10 +211,24 @@ public class OpenSrpService {
                 "Primary_Caregiver_Name", "",
                 Arrays.asList(new Object[]{patient.getCareTakerName()}), null
                 , null, "primary_caregiver_name"));
-            familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
-                "other_phone_number",
-                "",
-                Arrays.asList(new Object[]{patient.getCareTakerPhoneNumber()}), null, null, "other_phone_number"));
+
+            try {
+                Phonenumber.PhoneNumber cateTakerPhoneNumber =
+                    phoneUtil.parse(patient.getCareTakerPhoneNumber(), "TZ");
+
+                familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
+                    "other_phone_number",
+                    "",
+                    Arrays.asList(new Object[]{
+                        phoneUtil.format(
+                            cateTakerPhoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL
+                        ).replace(" ","")
+                    }),
+                    null, null, "other_phone_number"));
+            } catch (NumberParseException e) {
+                System.err.println("NumberParseException was thrown: " + e.toString());
+            }
+
             familyMemberRegistrationEvent.addObs(new Obs("concept", "text",
                 "data_source", "",
                 Arrays.asList(new Object[]{"ctc_import"}), null, null,
