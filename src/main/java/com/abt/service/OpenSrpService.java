@@ -58,7 +58,7 @@ public class OpenSrpService {
         familyClient.setId(UUID.randomUUID().toString());
         familyClient.setDateCreated(new Date());
         familyClient.setAttributes(new HashMap<>());
-        setAddress(familyClient, patient.getVillage(), patient.getMapCue());
+        setAddress(familyClient, patient.getHamlet(), patient.getMapCue());
 
 
         return familyClient;
@@ -126,7 +126,7 @@ public class OpenSrpService {
         attributes.put("Health_Insurance_Type", "None");
 
         ctcClient.setAttributes(attributes);
-        setAddress(ctcClient, patient.getVillage(), patient.getMapCue());
+        setAddress(ctcClient, patient.getHamlet(), patient.getMapCue());
         return ctcClient;
     }
 

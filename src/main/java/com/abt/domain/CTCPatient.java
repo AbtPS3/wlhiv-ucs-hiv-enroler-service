@@ -38,8 +38,8 @@ public class CTCPatient {
     @SerializedName("map_cue")
     private String mapCue;
 
-    @SerializedName("village")
-    private String village;
+    @SerializedName("hamlet")
+    private String hamlet;
 
     @SerializedName("phone_number")
     private String phoneNumber;
@@ -156,12 +156,12 @@ public class CTCPatient {
         this.mapCue = mapCue;
     }
 
-    public String getVillage() {
-        return village;
+    public String getHamlet() {
+        return hamlet;
     }
 
-    public void setVillage(String village) {
-        this.village = village;
+    public void setHamlet(String hamlet) {
+        this.hamlet = hamlet;
     }
 
     public String getPhoneNumber() {
