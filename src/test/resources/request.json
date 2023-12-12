@@ -1,21 +1,20 @@
 [
     {
         "healthFacilityCode": "HF001",
-        "firstName": "Eunice",
-        "middleName": "Pius",
+        "first_name": "Eunice",
+        "middle_name": "Pius",
         "surname": "Twalipo",
-        "ctcNumber": "12-38-1231-335631",
-        "dateOfBirth": 584981600000,
+        "ctc_number": "12-38-1231-335631",
+        "date_of_birth": "1990-01-01",
         "gender": "Female",
-        "hivStatus": true,
-        "mapCue": "Opposite na Shule",
+        "map_cue": "Opposite na Shule",
         "village": "Village Y",
-        "phoneNumber": "+255714345679",
-        "careTakerName": "Jane Doe",
-        "careTakerPhoneNumber": "0714987654",
-        "providerId": "test21",
+        "phone_number": "+255714345679",
+        "care_taker_name": "Jane Doe",
+        "care_taker_phone_number": "0714987654",
+        "provider_id": "test21",
         "team": "AGAKHAN - Nyamagana",
-        "teamId": "142c99bd-bf38-4e2f-9890-eb7c9c52ce46",
-        "locationId": "d1985g57-64e8-4d5a-af3f-0009fdf118cf"
+        "team_id": "142c99bd-bf38-4e2f-9890-eb7c9c52ce46",
+        "location_id": "d1985g57-64e8-4d5a-af3f-0009fdf118cf"
     }
 ]

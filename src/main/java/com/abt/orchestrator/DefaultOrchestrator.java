@@ -6,11 +6,14 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import com.abt.domain.CTCPatient;
 import com.abt.service.OpenSrpService;
+import com.abt.util.DateTimeTypeConverter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpHeaders;
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openhim.mediator.engine.MediatorConfig;
@@ -139,7 +142,14 @@ public class DefaultOrchestrator extends UntypedActor {
             request.getMethod(), request.getPath(), request.getBody());
 
         try {
-            ctcPatients = new Gson().fromJson(request.getBody(),
+            Gson gson
+                = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd")
+                .registerTypeAdapter(DateTime.class,
+                        new DateTimeTypeConverter())
+                .create();
+
+            ctcPatients = gson.fromJson(request.getBody(),
                 new TypeToken<List<CTCPatient>>() {
                 }.getType());
             validateAndProcessRequest(ctcPatients);
@@ -211,7 +221,7 @@ public class DefaultOrchestrator extends UntypedActor {
         log.info("Received response with status code :: " + response.getStatusCode());
         FinishRequest finishRequest =
             new FinishRequest(new Gson().toJson(ctcPatients),
-                "application/json" , SC_OK);
+                "application/json", SC_OK);
         originalRequest.getRequestHandler().tell(finishRequest, getSelf());
     }
 

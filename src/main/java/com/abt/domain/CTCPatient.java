@@ -2,6 +2,8 @@ package com.abt.domain;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class CTCPatient {
 
     @SerializedName("id")
@@ -24,7 +26,7 @@ public class CTCPatient {
     private String ctcNumber;
 
     @SerializedName("date_of_birth")
-    private long dateOfBirth;
+    private Date dateOfBirth;
 
     @SerializedName("gender")
     private String gender;
@@ -116,11 +118,11 @@ public class CTCPatient {
         this.ctcNumber = ctcNumber;
     }
 
-    public long getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(long dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
