@@ -3,7 +3,7 @@ package com.abt;
 import akka.actor.ActorSystem;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.abt.orchestrator.DefaultOrchestrator;
+import com.abt.orchestrator.IndexClientsOrchestrator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openhim.mediator.engine.*;
@@ -35,7 +35,8 @@ public class MediatorMain {
     private static RoutingTable buildRoutingTable()
         throws RoutingTable.RouteAlreadyMappedException {
         RoutingTable routingTable = new RoutingTable();
-        routingTable.addRoute("/import-into-ucs", DefaultOrchestrator.class);
+        routingTable.addRoute("/import-index-clients-into-ucs",
+            IndexClientsOrchestrator.class);
 
         return routingTable;
     }
