@@ -4,6 +4,7 @@ import akka.actor.ActorSystem;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import com.abt.orchestrator.IndexClientsOrchestrator;
+import com.abt.orchestrator.IndexContactsOrchestrator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openhim.mediator.engine.*;
@@ -37,6 +38,8 @@ public class MediatorMain {
         RoutingTable routingTable = new RoutingTable();
         routingTable.addRoute("/import-index-clients-into-ucs",
             IndexClientsOrchestrator.class);
+        routingTable.addRoute("/import-index-contacts-into-ucs",
+            IndexContactsOrchestrator.class);
 
         return routingTable;
     }
