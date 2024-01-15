@@ -4,7 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.JavaTestKit;
-import com.abt.orchestrator.mock.IndexClientMockDestination;
+import com.abt.orchestrator.mock.IndexContactsMockDestination;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class IndexClientsOrchestratorTest {
+class IndexContactsOrchestratorTest {
     /**
      * Represents the system actor.
      */
@@ -42,7 +42,7 @@ class IndexClientsOrchestratorTest {
         testConfig.setProperties("mediator-unit-test.properties");
 
         InputStream regInfo =
-            IndexClientsOrchestratorTest.class.getClassLoader().getResourceAsStream("mediator-registration-info.json");
+            IndexContactsOrchestratorTest.class.getClassLoader().getResourceAsStream("mediator-registration-info.json");
         RegistrationConfig regConfig = null;
         if (regInfo != null) {
             regConfig = new RegistrationConfig(regInfo);
@@ -65,24 +65,24 @@ class IndexClientsOrchestratorTest {
      * @throws Exception if an exception occurs
      */
     @Test
-    public void testSendingCtcClientsImportHTTPRequest() throws Exception {
+    public void testSendingCtcContactsImportHTTPRequest() throws Exception {
         assertNotNull(testConfig);
         new JavaTestKit(system) {{
             List<TestMockLauncher.ActorToLaunch> toLaunch = new LinkedList<>();
 
             toLaunch.add(new TestMockLauncher.ActorToLaunch("http-connector",
-                IndexClientMockDestination.class, null));
+                IndexContactsMockDestination.class, null));
             com.abt.orchestrator.TestingUtils.launchActors(system,
                 testConfig.getName(), toLaunch);
 
             InputStream stream =
-                IndexClientsOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
+                IndexContactsOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
 
             assertNotNull(stream);
 
 
             createActorAndSendRequest(system, testConfig, getRef(),
-                IOUtils.toString(stream), IndexClientsOrchestrator.class,
+                IOUtils.toString(stream), IndexContactsOrchestrator.class,
                 "/results");
 
             final Object[] out =
