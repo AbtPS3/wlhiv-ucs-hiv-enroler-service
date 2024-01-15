@@ -128,7 +128,6 @@ public class IndexContactsOrchestrator extends UntypedActor {
             getContext(), config);
     }
 
-
     private void handleBadRequest() {
         FinishRequest finishRequest = new FinishRequest("Bad Request",
             "application/json", SC_BAD_REQUEST);
