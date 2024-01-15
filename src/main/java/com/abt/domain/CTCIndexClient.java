@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class CTCPatient {
+public class CTCIndexClient {
 
     @SerializedName("id")
     private long id;

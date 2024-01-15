@@ -14,10 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Represents a mock destination.
  */
-public class MockDestination extends MockHTTPConnector {
-    public MockDestination() {
-
-    }
+public class IndexContactsMockDestination extends MockHTTPConnector {
 
     /**
      * Gets the response.
@@ -59,7 +56,7 @@ public class MockDestination extends MockHTTPConnector {
         System.out.println("Received body : " + msg.getBody());
 
         JSONObject body = new JSONObject(msg.getBody());
-        assertEquals("3", body.getString("no_of_events"));
+        assertEquals(3, body.getInt("no_of_events"));
         assertEquals(2, body.getJSONArray("clients").length());
         assertEquals(3, body.getJSONArray("events").length());
 
@@ -69,7 +66,7 @@ public class MockDestination extends MockHTTPConnector {
         assertEquals("Family Member Registration",
             body.getJSONArray("events").getJSONObject(1).getString("eventType"
             ));
-        assertEquals("HIV Registration",
+        assertEquals("Hiv Index Contact Registration",
             body.getJSONArray("events").getJSONObject(2).getString("eventType"
             ));
 

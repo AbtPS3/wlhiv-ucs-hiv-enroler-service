@@ -4,9 +4,8 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.JavaTestKit;
-import com.abt.orchestrator.mock.MockDestination;
+import com.abt.orchestrator.mock.IndexClientMockDestination;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class DefaultOrchestratorTest {
+class IndexClientsOrchestratorTest {
     /**
      * Represents the system actor.
      */
@@ -43,7 +42,7 @@ class DefaultOrchestratorTest {
         testConfig.setProperties("mediator-unit-test.properties");
 
         InputStream regInfo =
-            DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("mediator-registration-info.json");
+            IndexClientsOrchestratorTest.class.getClassLoader().getResourceAsStream("mediator-registration-info.json");
         RegistrationConfig regConfig = null;
         if (regInfo != null) {
             regConfig = new RegistrationConfig(regInfo);
@@ -72,18 +71,18 @@ class DefaultOrchestratorTest {
             List<TestMockLauncher.ActorToLaunch> toLaunch = new LinkedList<>();
 
             toLaunch.add(new TestMockLauncher.ActorToLaunch("http-connector",
-                MockDestination.class, null));
+                IndexClientMockDestination.class, null));
             com.abt.orchestrator.TestingUtils.launchActors(system,
                 testConfig.getName(), toLaunch);
 
             InputStream stream =
-                DefaultOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
+                IndexClientsOrchestratorTest.class.getClassLoader().getResourceAsStream("request.json");
 
             assertNotNull(stream);
 
 
             createActorAndSendRequest(system, testConfig, getRef(),
-                IOUtils.toString(stream), DefaultOrchestrator.class,
+                IOUtils.toString(stream), IndexClientsOrchestrator.class,
                 "/results");
 
             final Object[] out =

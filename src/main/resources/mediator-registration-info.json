@@ -8,7 +8,7 @@
             "name": "UCS Data Import Route",
             "host": "localhost",
             "port": "3106",
-            "path": "/import-into-ucs",
+            "path": "/import-index-clients-into-ucs",
             "type": "http"
         }
     ]
