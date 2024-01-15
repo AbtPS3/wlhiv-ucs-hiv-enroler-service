@@ -3,7 +3,6 @@ package com.abt.orchestrator;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.abt.domain.CTCIndexClient;
 import com.abt.domain.CTCIndexContact;
 import com.abt.service.OpenSrpService;
 import com.abt.util.DateTimeTypeConverter;
@@ -58,7 +57,8 @@ public class IndexContactsOrchestrator extends UntypedActor {
     private List<CTCIndexContact> ctcIndexContacts;
 
     /**
-     * Initializes a new instance of the {@link IndexContactsOrchestrator} class.
+     * Initializes a new instance of the {@link IndexContactsOrchestrator}
+     * class.
      *
      * @param config The mediator configuration.
      */
@@ -121,7 +121,8 @@ public class IndexContactsOrchestrator extends UntypedActor {
             handleBadRequest();
         }
 
-        String clientsEvents = OpenSrpService.generateContactsEvent(ctcIndexContacts);
+        String clientsEvents =
+                OpenSrpService.generateContactsEvent(ctcIndexContacts);
         sendRequestToDestination(host, port, scheme, username,
             password, clientsEvents, log, originalRequest, getSelf(),
             getContext(), config);
