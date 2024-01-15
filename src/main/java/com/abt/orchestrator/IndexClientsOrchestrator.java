@@ -3,7 +3,7 @@ package com.abt.orchestrator;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.abt.domain.CTCPatient;
+import com.abt.domain.CTCIndexClient;
 import com.abt.service.OpenSrpService;
 import com.abt.util.DateTimeTypeConverter;
 import com.google.gson.Gson;
@@ -54,7 +54,7 @@ public class IndexClientsOrchestrator extends UntypedActor {
 
     String password;
 
-    private List<CTCPatient> ctcPatients;
+    private List<CTCIndexClient> ctcIndexClients;
 
     /**
      * Initializes a new instance of the {@link IndexClientsOrchestrator} class.
@@ -95,23 +95,23 @@ public class IndexClientsOrchestrator extends UntypedActor {
                     new DateTimeTypeConverter())
                 .create();
 
-            ctcPatients = gson.fromJson(request.getBody(),
-                new TypeToken<List<CTCPatient>>() {
+            ctcIndexClients = gson.fromJson(request.getBody(),
+                new TypeToken<List<CTCIndexClient>>() {
                 }.getType());
-            validateAndProcessRequest(ctcPatients);
+            validateAndProcessRequest(ctcIndexClients);
         } catch (Exception e) {
             handleBadRequest();
         }
     }
 
-    private void validateAndProcessRequest(List<CTCPatient> ctcPatients) {
+    private void validateAndProcessRequest(List<CTCIndexClient> ctcIndexClients) {
         try {
             JSONArray identifiers = fetchOpenMRSIds(host, port, scheme,
                 username, password,
-                ctcPatients.size());
+                ctcIndexClients.size());
             log.info("Received identifiers : " + identifiers.toString());
-            for (int i = 0; i < ctcPatients.size(); i++) {
-                ctcPatients.get(i).setUniqueId(identifiers.getString(i)
+            for (int i = 0; i < ctcIndexClients.size(); i++) {
+                ctcIndexClients.get(i).setUniqueId(identifiers.getString(i)
                     .replace("-", ""));
             }
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class IndexClientsOrchestrator extends UntypedActor {
             handleBadRequest();
         }
 
-        String clientsEvents = OpenSrpService.generateClientEvent(ctcPatients);
+        String clientsEvents = OpenSrpService.generateClientEvent(ctcIndexClients);
         sendRequestToDestination(host, port, scheme, username,
             password, clientsEvents, log, originalRequest, getSelf(),
             getContext(), config);
@@ -136,7 +136,7 @@ public class IndexClientsOrchestrator extends UntypedActor {
     private void handleMediatorHTTPResponse(MediatorHTTPResponse response) {
         log.info("Received response with status code :: " + response.getStatusCode());
         FinishRequest finishRequest =
-            new FinishRequest(new Gson().toJson(ctcPatients),
+            new FinishRequest(new Gson().toJson(ctcIndexClients),
                 "application/json", SC_OK);
         originalRequest.getRequestHandler().tell(finishRequest, getSelf());
     }

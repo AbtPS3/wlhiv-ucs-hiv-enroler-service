@@ -47,7 +47,7 @@ public class OpenSrpService {
      * @param patient The CTCPatient object.
      * @return Client object for the family.
      */
-    public static Client getClientEvent(CTCPatient patient) {
+    public static Client getClientEvent(CTCIndexClient patient) {
         Client familyClient = new Client(UUID.randomUUID().toString());
         familyClient.setFirstName(patient.getSurname());
         familyClient.setLastName("Family");
@@ -102,7 +102,7 @@ public class OpenSrpService {
      * @param patient The CTCPatient object.
      * @return Client object for the family head.
      */
-    public static Client getFamilyHeadClientEvent(CTCPatient patient) {
+    public static Client getFamilyHeadClientEvent(CTCIndexClient patient) {
         Client ctcClient = new Client(UUID.randomUUID().toString());
         try {
             ctcClient.setFirstName(patient.getFirstName());
@@ -141,7 +141,7 @@ public class OpenSrpService {
      * @return Family Registration Event.
      */
     public static Event getFamilyRegistrationEvent(Client client,
-                                                   CTCPatient patient) {
+                                                   CTCIndexClient patient) {
         Event familyRegistrationEvent = new Event();
         familyRegistrationEvent.setBaseEntityId(client.getBaseEntityId());
         familyRegistrationEvent.setEventType("Family Registration");
@@ -163,7 +163,7 @@ public class OpenSrpService {
      * @return Family Member Registration Event.
      */
     public static Event getFamilyMemberRegistrationEvent(Client client,
-                                                         CTCPatient patient) {
+                                                         CTCIndexClient patient) {
         Event familyMemberRegistrationEvent = new Event();
         familyMemberRegistrationEvent.setBaseEntityId(client.getBaseEntityId());
         familyMemberRegistrationEvent.setEventType("Family Member " +
@@ -248,7 +248,7 @@ public class OpenSrpService {
      * @return HIV Registration Event.
      */
     public static Event getHIVRegistrationEvent(Client client,
-                                                CTCPatient patient) {
+                                                CTCIndexClient patient) {
         Event hivFollowupEvent = new Event();
         hivFollowupEvent.setBaseEntityId(client.getBaseEntityId());
         hivFollowupEvent.setEventType("HIV Registration");
@@ -282,13 +282,46 @@ public class OpenSrpService {
         return hivFollowupEvent;
     }
 
+
+    /**
+     * Creates an Index Contact  Elicitation Event for a given Client
+     *
+     * @param client  The Client object.
+     * @param indexContact The CTCIndexContact object.
+     * @return Index Contact Elicitation Event.
+     */
+    public static Event getIndexContactElicitationEvent(Client client,
+                                                CTCIndexContact indexContact) {
+        Event hivFollowupEvent = new Event();
+        hivFollowupEvent.setBaseEntityId(client.getBaseEntityId());
+        hivFollowupEvent.setEventType("Hiv Index Contact Registration");
+        hivFollowupEvent.setEntityType("ec_hiv_index_hf");
+
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "index_client_base_entity_id", "", Arrays.asList(new Object[]{
+            indexContact.getIndexClientBaseEntityId()}), null, null, "index_client_base_entity_id"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "relationship", "",
+            Arrays.asList(new Object[]{indexContact.getRelationship()}), null
+            , null,
+            "relationship"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text", "how_to_notify_the_contact_client", ""
+            , Arrays.asList(new Object[]{indexContact.getHow_to_notify_the_contact_client()}), null, null,
+            "how_to_notify_the_contact_client"));
+
+        setMetaData(hivFollowupEvent, indexContact);
+        return hivFollowupEvent;
+    }
+
     /**
      * Sets metadata for the given Event based on a CTCPatient.
      *
      * @param event   The Event object.
      * @param patient The CTCPatient object.
      */
-    private static void setMetaData(Event event, CTCPatient patient) {
+    private static void setMetaData(Event event, CTCIndexClient patient) {
         event.setLocationId(patient.getLocationId());
         event.setProviderId(patient.getProviderId());
         event.setTeamId(patient.getTeamId());
@@ -305,18 +338,19 @@ public class OpenSrpService {
         event.setIdentifiers(new HashMap<>());
     }
 
+
     /**
      * Generates Client events for a list of CTCPatients.
      *
-     * @param ctcPatients List of CTCPatient objects.
+     * @param ctcIndexClients List of CTCPatient objects.
      * @return JSON representation of ClientEvents.
      */
-    public static String generateClientEvent(List<CTCPatient> ctcPatients) {
+    public static String generateClientEvent(List<CTCIndexClient> ctcIndexClients) {
 
         List<Client> clients = new ArrayList<>();
         List<Event> events = new ArrayList<>();
 
-        for (CTCPatient patient : ctcPatients) {
+        for (CTCIndexClient patient : ctcIndexClients) {
             Client familyClient = getClientEvent(patient);
             Client ctcClient = getFamilyHeadClientEvent(patient);
 
@@ -363,6 +397,84 @@ public class OpenSrpService {
             events.add(familyRegistrationEvent);
             events.add(familyMemberRegistrationEvent);
             events.add(hivRegistrationEvent);
+        }
+
+        ClientEvents clientEvents = new ClientEvents();
+        clientEvents.setClients(clients);
+        clientEvents.setEvents(events);
+        clientEvents.setNoOfEvents(events.size());
+
+        Gson gson
+            = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+            .create();
+
+
+        return gson.toJson(clientEvents);
+
+    }
+
+
+    /**
+     * Generates Client events for a list of CTCPatients.
+     *
+     * @param ctcIndexContacts List of CTCPatient objects.
+     * @return JSON representation of ClientEvents.
+     */
+    public static String generateContactsEvent(List<CTCIndexContact> ctcIndexContacts) {
+
+        List<Client> clients = new ArrayList<>();
+        List<Event> events = new ArrayList<>();
+
+        for (CTCIndexContact patient : ctcIndexContacts) {
+            Client familyClient = getClientEvent(patient);
+            Client ctcClient = getFamilyHeadClientEvent(patient);
+
+            patient.setBaseEntityId(ctcClient.getBaseEntityId());
+
+            Map<String, List<String>> familyRelationships = new HashMap<>();
+            familyRelationships.put("family_head",
+                Collections.singletonList(ctcClient.getBaseEntityId()));
+            familyRelationships.put("primary_caregiver",
+                Collections.singletonList(ctcClient.getBaseEntityId()));
+            familyClient.setRelationships(familyRelationships);
+
+            Map<String, String> familyIdentifier = new HashMap<>();
+            familyIdentifier.put("opensrp_id", patient.getUniqueId() +
+                "_family");
+            familyClient.setIdentifiers(familyIdentifier);
+
+
+            Map<String, List<String>> ctcClientRelations = new HashMap<>();
+            ctcClientRelations.put("family",
+                Collections.singletonList(familyClient.getBaseEntityId()));
+            ctcClient.setRelationships(ctcClientRelations);
+
+            Map<String, String> clientIdentifier = new HashMap<>();
+            clientIdentifier.put("opensrp_id", patient.getUniqueId());
+            ctcClient.setIdentifiers(clientIdentifier);
+
+
+            //Generate family registration event
+            Event familyRegistrationEvent =
+                getFamilyRegistrationEvent(familyClient, patient);
+
+            //Generate family Member registration event
+            Event familyMemberRegistrationEvent =
+                getFamilyMemberRegistrationEvent(ctcClient, patient);
+
+            //Generate Index Contacts Elicitation event
+            Event indexContactsElicitationEvent =
+                getIndexContactElicitationEvent(ctcClient,
+                patient);
+
+
+            clients.add(familyClient);
+            clients.add(ctcClient);
+            events.add(familyRegistrationEvent);
+            events.add(familyMemberRegistrationEvent);
+            events.add(indexContactsElicitationEvent);
         }
 
         ClientEvents clientEvents = new ClientEvents();
