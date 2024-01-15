@@ -15,9 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Represents a mock destination.
  */
 public class IndexContactsMockDestination extends MockHTTPConnector {
-    public IndexContactsMockDestination() {
-
-    }
 
     /**
      * Gets the response.

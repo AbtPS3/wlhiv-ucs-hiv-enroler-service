@@ -2,8 +2,6 @@ package com.abt.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 public class CTCIndexContact extends CTCIndexClient {
 
     @SerializedName("index_client_base_entity_id")
@@ -31,11 +29,12 @@ public class CTCIndexContact extends CTCIndexClient {
         this.relationship = relationship;
     }
 
-    public String getHow_to_notify_the_contact_client() {
+    public String getHowToNotifyTheContactClient() {
         return how_to_notify_the_contact_client;
     }
 
-    public void setHow_to_notify_the_contact_client(String how_to_notify_the_contact_client) {
-        this.how_to_notify_the_contact_client = how_to_notify_the_contact_client;
+    public void setHowToNotifyTheContactClient(String how_to_notify_the_contact_client) {
+        this.how_to_notify_the_contact_client =
+                how_to_notify_the_contact_client;
     }
 }
