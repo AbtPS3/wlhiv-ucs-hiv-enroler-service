@@ -302,14 +302,16 @@ public class OpenSrpService {
             indexContact.getIndexClientBaseEntityId()}), null, null, "index_client_base_entity_id"));
 
         hivFollowupEvent.addObs(new Obs("concept", "text",
+            "how_to_notify_the_contact_client", "",
+            Arrays.asList(new Object[]{indexContact.getNotificationType()}), null
+            , null,
+            "how_to_notify_the_contact_client"));
+
+        hivFollowupEvent.addObs(new Obs("concept", "text",
             "relationship", "",
             Arrays.asList(new Object[]{indexContact.getRelationship()}), null
             , null,
             "relationship"));
-
-        hivFollowupEvent.addObs(new Obs("concept", "text", "how_to_notify_the_contact_client", ""
-            , Arrays.asList(new Object[]{indexContact.getNotificationType()}), null, null,
-            "how_to_notify_the_contact_client"));
 
         setMetaData(hivFollowupEvent, indexContact);
         return hivFollowupEvent;
