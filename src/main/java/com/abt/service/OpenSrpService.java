@@ -308,7 +308,7 @@ public class OpenSrpService {
             "relationship"));
 
         hivFollowupEvent.addObs(new Obs("concept", "text", "how_to_notify_the_contact_client", ""
-            , Arrays.asList(new Object[]{indexContact.getHowToNotifyTheContactClient()}), null, null,
+            , Arrays.asList(new Object[]{indexContact.getNotificationType()}), null, null,
             "how_to_notify_the_contact_client"));
 
         setMetaData(hivFollowupEvent, indexContact);
