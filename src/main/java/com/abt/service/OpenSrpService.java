@@ -313,6 +313,12 @@ public class OpenSrpService {
             , null,
             "relationship"));
 
+        hivFollowupEvent.addObs(new Obs("concept", "text",
+            "elicitation_number", "",
+            Arrays.asList(new Object[]{indexContact.getElicitationNumber()}), null
+            , null,
+            "elicitation_number"));
+
         setMetaData(hivFollowupEvent, indexContact);
         return hivFollowupEvent;
     }
