@@ -67,7 +67,7 @@ public class IndexClientsOrchestrator extends UntypedActor {
         port = Integer.parseInt(config.getProperty("destination.port"));
         username = config.getProperty("destination.username");
         password = config.getProperty("destination.password");
-        scheme = "http";
+        scheme = config.getProperty("destination.scheme");
     }
 
 
