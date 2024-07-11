@@ -11,6 +11,9 @@ import org.joda.time.DateTime;
 
 import java.util.*;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 /**
  * Service class for OpenSRP operations.
  */
@@ -193,9 +196,9 @@ public class OpenSrpService {
                     phoneUtil.format(
                         tzPhoneNumber,
                         PhoneNumberUtil.PhoneNumberFormat.NATIONAL)
-                        .replace(" ","")
+                        .replace(" ", "")
                 }), null,
-                    null
+                null
                 , "phone_number"));
         } catch (NumberParseException e) {
             System.err.println("NumberParseException was thrown: " + e.toString());
@@ -222,7 +225,7 @@ public class OpenSrpService {
                     Arrays.asList(new Object[]{
                         phoneUtil.format(
                             cateTakerPhoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL
-                        ).replace(" ","")
+                        ).replace(" ", "")
                     }),
                     null, null, "other_phone_number"));
             } catch (NumberParseException e) {
@@ -286,12 +289,12 @@ public class OpenSrpService {
     /**
      * Creates an Index Contact  Elicitation Event for a given Client
      *
-     * @param client  The Client object.
+     * @param client       The Client object.
      * @param indexContact The CTCIndexContact object.
      * @return Index Contact Elicitation Event.
      */
     public static Event getIndexContactElicitationEvent(Client client,
-                                                CTCIndexContact indexContact) {
+                                                        CTCIndexContact indexContact) {
         Event hivFollowupEvent = new Event();
         hivFollowupEvent.setBaseEntityId(client.getBaseEntityId());
         hivFollowupEvent.setEventType("Hiv Index Contact Registration");
@@ -321,6 +324,112 @@ public class OpenSrpService {
 
         setMetaData(hivFollowupEvent, indexContact);
         return hivFollowupEvent;
+    }
+
+
+    /**
+     * Creates an Index Contact  Testing Outcome Event for a given Client
+     *
+     * @param client                          The Client object.
+     * @param ctcIndexContactsTestingFollowup The CTCIndexContact Testing Results object.
+     * @return Index Contact Followup Event.
+     */
+    public static Event getIndexContactTestingFollowupEvent(Client client,
+                                                            CTCIndexContactsTestingFollowup ctcIndexContactsTestingFollowup) {
+        Event indexClientTestingFollowupEvent = new Event();
+        indexClientTestingFollowupEvent.setBaseEntityId(client.getBaseEntityId());
+        indexClientTestingFollowupEvent.setEventType("HIV Index Contact Testing Followup");
+        indexClientTestingFollowupEvent.setEntityType("ec_hiv_index_hf");
+
+        indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+            "has_the_client_been_reached", "", Arrays.asList(new Object[]{
+            "yes"}), null, null, "has_the_client_been_reached"));
+
+        boolean isTheClientEligibleForTesting = isBlank(ctcIndexContactsTestingFollowup.getIneligibilityReason());
+
+        if (isTheClientEligibleForTesting) {
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "eligibility_for_testing", "",
+                Arrays.asList(new Object[]{"yes"}), null
+                , null,
+                "eligibility_for_testing"));
+        } else {
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "eligibility_for_testing", "",
+                Arrays.asList(new Object[]{"no"}), null
+                , null,
+                "eligibility_for_testing"));
+
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "reasons_for_ineligibility_for_testing", "",
+                Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getIneligibilityReason()}), null
+                , null,
+                "reasons_for_ineligibility_for_testing"));
+        }
+
+        boolean hasTheClientBeenTested = isBlank(ctcIndexContactsTestingFollowup.getNotTestingReason());
+
+        if (hasTheClientBeenTested) {
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "has_the_contact_client_been_tested", "",
+                Arrays.asList(new Object[]{"yes"}), null
+                , null,
+                "has_the_contact_client_been_tested"));
+
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "test_results", "",
+                Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getTestResults()}), null
+                , null,
+                "test_results"));
+
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "place_where_test_was_conducted", "",
+                Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getPlaceForTesting()}), null
+                , null,
+                "place_where_test_was_conducted"));
+
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "client_test_date", "",
+                Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getTestDate()}), null
+                , null,
+                "client_test_date"));
+
+            if (isNotBlank(ctcIndexContactsTestingFollowup.getCtcNumber())) {
+                indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                    "enrolled_to_clinic", "",
+                    Arrays.asList(new Object[]{"yes"}), null
+                    , null,
+                    "enrolled_to_clinic"));
+
+                indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                    "ctc_number", "",
+                    Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getCtcNumber()}), null
+                    , null,
+                    "ctc_number"));
+            } else {
+                indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                    "enrolled_to_clinic", "",
+                    Arrays.asList(new Object[]{"no"}), null
+                    , null,
+                    "enrolled_to_clinic"));
+            }
+
+        } else {
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "has_the_contact_client_been_tested", "",
+                Arrays.asList(new Object[]{"no"}), null
+                , null,
+                "has_the_contact_client_been_tested"));
+
+            indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                "reasons_conducting_testing_for_index_contact", "",
+                Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getNotTestingReason()}), null
+                , null,
+                "reasons_conducting_testing_for_index_contact"));
+        }
+
+        setMetaData(indexClientTestingFollowupEvent, ctcIndexContactsTestingFollowup);
+        return indexClientTestingFollowupEvent;
     }
 
     /**
@@ -475,7 +584,7 @@ public class OpenSrpService {
             //Generate Index Contacts Elicitation event
             Event indexContactsElicitationEvent =
                 getIndexContactElicitationEvent(ctcClient,
-                patient);
+                    patient);
 
 
             clients.add(familyClient);
@@ -483,6 +592,90 @@ public class OpenSrpService {
             events.add(familyRegistrationEvent);
             events.add(familyMemberRegistrationEvent);
             events.add(indexContactsElicitationEvent);
+        }
+
+        ClientEvents clientEvents = new ClientEvents();
+        clientEvents.setClients(clients);
+        clientEvents.setEvents(events);
+        clientEvents.setNoOfEvents(events.size());
+
+        Gson gson
+            = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+            .create();
+
+
+        return gson.toJson(clientEvents);
+
+    }
+
+
+    /**
+     * Generates Client events for a list of Index Test Results.
+     *
+     * @param ctcIndexContactsTestingFollowups List of CTCIndexContactsTestingFollowup objects.
+     * @return JSON representation of ClientEvents.
+     */
+    public static String generateContactsAndTestingFollowupEvent(List<CTCIndexContactsTestingFollowup> ctcIndexContactsTestingFollowups) {
+
+        List<Client> clients = new ArrayList<>();
+        List<Event> events = new ArrayList<>();
+
+        for (CTCIndexContactsTestingFollowup patient : ctcIndexContactsTestingFollowups) {
+            Client familyClient = getClientEvent(patient);
+            Client ctcClient = getFamilyHeadClientEvent(patient);
+
+            patient.setBaseEntityId(ctcClient.getBaseEntityId());
+
+            Map<String, List<String>> familyRelationships = new HashMap<>();
+            familyRelationships.put("family_head",
+                Collections.singletonList(ctcClient.getBaseEntityId()));
+            familyRelationships.put("primary_caregiver",
+                Collections.singletonList(ctcClient.getBaseEntityId()));
+            familyClient.setRelationships(familyRelationships);
+
+            Map<String, String> familyIdentifier = new HashMap<>();
+            familyIdentifier.put("opensrp_id", patient.getUniqueId() +
+                "_family");
+            familyClient.setIdentifiers(familyIdentifier);
+
+
+            Map<String, List<String>> ctcClientRelations = new HashMap<>();
+            ctcClientRelations.put("family",
+                Collections.singletonList(familyClient.getBaseEntityId()));
+            ctcClient.setRelationships(ctcClientRelations);
+
+            Map<String, String> clientIdentifier = new HashMap<>();
+            clientIdentifier.put("opensrp_id", patient.getUniqueId());
+            ctcClient.setIdentifiers(clientIdentifier);
+
+
+            //Generate family registration event
+            Event familyRegistrationEvent =
+                getFamilyRegistrationEvent(familyClient, patient);
+
+            //Generate family Member registration event
+            Event familyMemberRegistrationEvent =
+                getFamilyMemberRegistrationEvent(ctcClient, patient);
+
+            //Generate Index Contacts Elicitation event
+            Event indexContactsElicitationEvent =
+                getIndexContactElicitationEvent(ctcClient,
+                    patient);
+
+            //Generate Index Contacts Testing Followup event
+            Event indexContactsTestingFollowupEvent =
+                getIndexContactTestingFollowupEvent(ctcClient,
+                    patient);
+
+
+            clients.add(familyClient);
+            clients.add(ctcClient);
+            events.add(familyRegistrationEvent);
+            events.add(familyMemberRegistrationEvent);
+            events.add(indexContactsElicitationEvent);
+            events.add(indexContactsTestingFollowupEvent);
         }
 
         ClientEvents clientEvents = new ClientEvents();
