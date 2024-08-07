@@ -19,9 +19,6 @@ public class CTCIndexContactsTestingFollowup extends CTCIndexContact {
     @SerializedName("test_date")
     private String testDate;
 
-    @SerializedName("ctc_number")
-    private String ctcNumber;
-
     public String getIneligibilityReason() {
         return ineligibilityReason;
     }
@@ -60,15 +57,5 @@ public class CTCIndexContactsTestingFollowup extends CTCIndexContact {
 
     public void setTestDate(String testDate) {
         this.testDate = testDate;
-    }
-
-    @Override
-    public String getCtcNumber() {
-        return ctcNumber;
-    }
-
-    @Override
-    public void setCtcNumber(String ctcNumber) {
-        this.ctcNumber = ctcNumber;
     }
 }
