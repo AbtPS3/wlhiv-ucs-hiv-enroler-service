@@ -107,13 +107,13 @@ public class IndexContactsTestingFollowupOrchestrator extends UntypedActor {
 
     private void validateAndProcessRequest(List<CTCIndexContactsTestingFollowup> ctcIndexContactsTestingFollowups) {
         try {
-            JSONArray identifiers = fetchOpenMRSIds(host, port, scheme,
-                username, password,
-                ctcIndexContactsTestingFollowups.size());
-            log.info("Received identifiers : " + identifiers.toString());
             for (int i = 0; i < ctcIndexContactsTestingFollowups.size(); i++) {
-                ctcIndexContactsTestingFollowups.get(i).setUniqueId(identifiers.getString(i)
-                    .replace("-", ""));
+                if(ctcIndexContactsTestingFollowups.get(i).getBaseEntityId() == null){
+                    JSONArray identifiers = fetchOpenMRSIds(host, port, scheme,
+                        username, password, 1);
+                    log.info("Received identifier : " + identifiers.toString());
+                    ctcIndexContactsTestingFollowups.get(i).setUniqueId(identifiers.getString(i).replace("-", ""));
+                }
             }
         } catch (Exception e) {
             log.info("Received an error message while getting Identifiers");

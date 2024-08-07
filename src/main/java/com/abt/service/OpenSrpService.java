@@ -1,6 +1,13 @@
 package com.abt.service;
 
-import com.abt.domain.*;
+import com.abt.domain.Address;
+import com.abt.domain.CTCIndexClient;
+import com.abt.domain.CTCIndexContact;
+import com.abt.domain.CTCIndexContactsTestingFollowup;
+import com.abt.domain.Client;
+import com.abt.domain.ClientEvents;
+import com.abt.domain.Event;
+import com.abt.domain.Obs;
 import com.abt.util.DateTimeTypeConverter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,7 +16,15 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import org.joda.time.DateTime;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -106,7 +121,13 @@ public class OpenSrpService {
      * @return Client object for the family head.
      */
     public static Client getFamilyHeadClientEvent(CTCIndexClient patient) {
-        Client ctcClient = new Client(UUID.randomUUID().toString());
+        Client ctcClient;
+        if (patient.getBaseEntityId() == null) {
+            ctcClient = new Client(UUID.randomUUID().toString());
+        } else {
+            ctcClient = new Client(patient.getBaseEntityId());
+        }
+
         try {
             ctcClient.setFirstName(patient.getFirstName());
             ctcClient.setMiddleName(patient.getMiddleName());
@@ -224,7 +245,8 @@ public class OpenSrpService {
                     "",
                     Arrays.asList(new Object[]{
                         phoneUtil.format(
-                            cateTakerPhoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL
+                            cateTakerPhoneNumber,
+                            PhoneNumberUtil.PhoneNumberFormat.NATIONAL
                         ).replace(" ", "")
                     }),
                     null, null, "other_phone_number"));
@@ -302,11 +324,13 @@ public class OpenSrpService {
 
         hivFollowupEvent.addObs(new Obs("concept", "text",
             "index_client_base_entity_id", "", Arrays.asList(new Object[]{
-            indexContact.getIndexClientBaseEntityId()}), null, null, "index_client_base_entity_id"));
+            indexContact.getIndexClientBaseEntityId()}), null, null,
+            "index_client_base_entity_id"));
 
         hivFollowupEvent.addObs(new Obs("concept", "text",
             "how_to_notify_the_contact_client", "",
-            Arrays.asList(new Object[]{indexContact.getNotificationType()}), null
+            Arrays.asList(new Object[]{indexContact.getNotificationType()}),
+            null
             , null,
             "how_to_notify_the_contact_client"));
 
@@ -318,7 +342,8 @@ public class OpenSrpService {
 
         hivFollowupEvent.addObs(new Obs("concept", "text",
             "elicitation_number", "",
-            Arrays.asList(new Object[]{indexContact.getElicitationNumber()}), null
+            Arrays.asList(new Object[]{indexContact.getElicitationNumber()}),
+            null
             , null,
             "elicitation_number"));
 
@@ -331,21 +356,24 @@ public class OpenSrpService {
      * Creates an Index Contact  Testing Outcome Event for a given Client
      *
      * @param client                          The Client object.
-     * @param ctcIndexContactsTestingFollowup The CTCIndexContact Testing Results object.
+     * @param ctcIndexContactsTestingFollowup The CTCIndexContact Testing
+     *                                        Results object.
      * @return Index Contact Followup Event.
      */
     public static Event getIndexContactTestingFollowupEvent(Client client,
                                                             CTCIndexContactsTestingFollowup ctcIndexContactsTestingFollowup) {
         Event indexClientTestingFollowupEvent = new Event();
         indexClientTestingFollowupEvent.setBaseEntityId(client.getBaseEntityId());
-        indexClientTestingFollowupEvent.setEventType("HIV Index Contact Testing Followup");
+        indexClientTestingFollowupEvent.setEventType("HIV Index Contact " +
+            "Testing Followup");
         indexClientTestingFollowupEvent.setEntityType("ec_hiv_index_hf");
 
         indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
             "has_the_client_been_reached", "", Arrays.asList(new Object[]{
             "yes"}), null, null, "has_the_client_been_reached"));
 
-        boolean isTheClientEligibleForTesting = isBlank(ctcIndexContactsTestingFollowup.getIneligibilityReason());
+        boolean isTheClientEligibleForTesting =
+            isBlank(ctcIndexContactsTestingFollowup.getIneligibilityReason());
 
         if (isTheClientEligibleForTesting) {
             indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
@@ -367,7 +395,8 @@ public class OpenSrpService {
                 "reasons_for_ineligibility_for_testing"));
         }
 
-        boolean hasTheClientBeenTested = isBlank(ctcIndexContactsTestingFollowup.getNotTestingReason());
+        boolean hasTheClientBeenTested =
+            isBlank(ctcIndexContactsTestingFollowup.getNotTestingReason());
 
         if (hasTheClientBeenTested) {
             indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
@@ -395,19 +424,22 @@ public class OpenSrpService {
                 "client_test_date"));
 
             if (isNotBlank(ctcIndexContactsTestingFollowup.getCtcNumber())) {
-                indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                indexClientTestingFollowupEvent.addObs(new Obs("concept",
+                    "text",
                     "enrolled_to_clinic", "",
                     Arrays.asList(new Object[]{"yes"}), null
                     , null,
                     "enrolled_to_clinic"));
 
-                indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                indexClientTestingFollowupEvent.addObs(new Obs("concept",
+                    "text",
                     "ctc_number", "",
                     Arrays.asList(new Object[]{ctcIndexContactsTestingFollowup.getCtcNumber()}), null
                     , null,
                     "ctc_number"));
             } else {
-                indexClientTestingFollowupEvent.addObs(new Obs("concept", "text",
+                indexClientTestingFollowupEvent.addObs(new Obs("concept",
+                    "text",
                     "enrolled_to_clinic", "",
                     Arrays.asList(new Object[]{"no"}), null
                     , null,
@@ -428,7 +460,8 @@ public class OpenSrpService {
                 "reasons_conducting_testing_for_index_contact"));
         }
 
-        setMetaData(indexClientTestingFollowupEvent, ctcIndexContactsTestingFollowup);
+        setMetaData(indexClientTestingFollowupEvent,
+            ctcIndexContactsTestingFollowup);
         return indexClientTestingFollowupEvent;
     }
 
@@ -614,7 +647,8 @@ public class OpenSrpService {
     /**
      * Generates Client events for a list of Index Test Results.
      *
-     * @param ctcIndexContactsTestingFollowups List of CTCIndexContactsTestingFollowup objects.
+     * @param ctcIndexContactsTestingFollowups List of
+     *                                         CTCIndexContactsTestingFollowup objects.
      * @return JSON representation of ClientEvents.
      */
     public static String generateContactsAndTestingFollowupEvent(List<CTCIndexContactsTestingFollowup> ctcIndexContactsTestingFollowups) {
@@ -622,7 +656,8 @@ public class OpenSrpService {
         List<Client> clients = new ArrayList<>();
         List<Event> events = new ArrayList<>();
 
-        for (CTCIndexContactsTestingFollowup patient : ctcIndexContactsTestingFollowups) {
+        for (CTCIndexContactsTestingFollowup patient :
+            ctcIndexContactsTestingFollowups) {
             Client familyClient = getClientEvent(patient);
             Client ctcClient = getFamilyHeadClientEvent(patient);
 
@@ -650,31 +685,32 @@ public class OpenSrpService {
             clientIdentifier.put("opensrp_id", patient.getUniqueId());
             ctcClient.setIdentifiers(clientIdentifier);
 
+            if (patient.getBaseEntityId() == null) {
+                //Generate family registration event
+                Event familyRegistrationEvent =
+                    getFamilyRegistrationEvent(familyClient, patient);
 
-            //Generate family registration event
-            Event familyRegistrationEvent =
-                getFamilyRegistrationEvent(familyClient, patient);
+                //Generate family Member registration event
+                Event familyMemberRegistrationEvent =
+                    getFamilyMemberRegistrationEvent(ctcClient, patient);
 
-            //Generate family Member registration event
-            Event familyMemberRegistrationEvent =
-                getFamilyMemberRegistrationEvent(ctcClient, patient);
+                //Generate Index Contacts Elicitation event
+                Event indexContactsElicitationEvent =
+                    getIndexContactElicitationEvent(ctcClient,
+                        patient);
 
-            //Generate Index Contacts Elicitation event
-            Event indexContactsElicitationEvent =
-                getIndexContactElicitationEvent(ctcClient,
-                    patient);
+                clients.add(familyClient);
+                clients.add(ctcClient);
+                events.add(familyRegistrationEvent);
+                events.add(familyMemberRegistrationEvent);
+                events.add(indexContactsElicitationEvent);
+            }
 
             //Generate Index Contacts Testing Followup event
             Event indexContactsTestingFollowupEvent =
                 getIndexContactTestingFollowupEvent(ctcClient,
                     patient);
 
-
-            clients.add(familyClient);
-            clients.add(ctcClient);
-            events.add(familyRegistrationEvent);
-            events.add(familyMemberRegistrationEvent);
-            events.add(indexContactsElicitationEvent);
             events.add(indexContactsTestingFollowupEvent);
         }
 
